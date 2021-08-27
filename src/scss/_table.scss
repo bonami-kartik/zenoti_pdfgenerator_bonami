@@ -1,0 +1,169 @@
+.ag-theme-alpine {
+  font-family: "Open Sans";
+  border-radius: 10px 10px 0 0;
+  border: 1px solid $color-grey-light;
+  .ag-root-wrapper {
+    border: none;
+    background-color: transparent;
+    border-radius: 10px 10px 0 0;
+  }
+  .ag-header {
+    background-color: $color-blue;
+    border-radius: 10px 10px 0 0;
+    font-size: 14px;
+  }
+  .ag-header-cell {
+    color: $color-white;
+    padding-right: 10px;
+    .ag-header-cell-text {
+      white-space: normal;
+    }
+    .ag-icon {
+      color: $color-white;
+    }
+  }
+  .ag-header-cell[col-id="note"] {
+    cursor: pointer;
+  }
+  .note-value,
+  .ag-cell-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 30px;
+    height: 70px;
+  }
+  .ag-row-odd,
+  .ag-row-even {
+    background-color: $color-white;
+    &:hover {
+      background-color: $color-light;
+    }
+  }
+  .ag-header-cell-resize::after {
+    background-color: $color-white;
+  }
+  .ag-filter-icon {
+    display: none;
+  }
+  .ag-row-selected {
+    background-color: $color-blue-light;
+    &:hover {
+      background-color: $color-grey-light;
+    }
+  }
+  .ag-body-viewport {
+    overflow-x: hidden;
+  }
+  .ag-body-viewport,
+  .ag-center-cols-viewport,
+  .ag-body-horizontal-scroll-viewport {
+    -webkit-transform: translate3d(0, 0, 0);
+    &::-webkit-scrollbar-track {
+      background-color: $color-white;
+    }
+    &::-webkit-scrollbar {
+      background-color: $color-white;
+      width: 8px;
+      height: 2px;
+    }
+    &:hover {
+      &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-left: none;
+      }
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-grey-light;
+      border-left: 6px solid transparent;
+      background-clip: content-box;
+    }
+  }
+  .ag-paging-panel {
+    border-bottom: 0.5px solid $color-grey-light;
+  }
+
+  .tooltip-icon {
+    color: $color-white;
+  }
+}
+.ag-theme-alpine input[class^="ag-"][type="text"] {
+  color: $color-grey;
+}
+.ag-theme-alpine .ag-row {
+  font-size: 14px;
+}
+.ag-paging-panel {
+  overflow: hidden;
+}
+.ag-popup {
+  border: none;
+}
+//tooltip
+.custom-tooltip {
+  position: absolute;
+  height: auto;
+  border: 1px solid cornflowerblue;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: $color-white;
+  transition: opacity 0.5s;
+}
+
+.custom-tooltip.ag-tooltip-hiding {
+  opacity: 0;
+}
+
+.custom-tooltip p {
+  margin: 5px;
+  word-break: break-word;
+}
+.table-text-highlight {
+  background-color: $color-green-light;
+}
+.area-filter {
+  background-color: $color-white;
+  padding: 10px;
+  min-height: 50px;
+  max-height: 250px;
+  max-width: 220px;
+  display: flex;
+  flex-direction: column;
+  .area-options-list {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-right: -5px;
+    max-height: 150px;
+    overflow-y: auto;
+    .area-option {
+      display: flex;
+      margin-top: 7px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: $color-white;
+    }
+    &::-webkit-scrollbar {
+      background-color: $color-white;
+      width: 3px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-grey-light;
+    }
+  }
+  .area-filter-reset-block {
+    border-top: 1px solid $color-light;
+    padding-top: 5px;
+    margin-top: 5px;
+    .btn {
+      font-size: 10px;
+    }
+  }
+}

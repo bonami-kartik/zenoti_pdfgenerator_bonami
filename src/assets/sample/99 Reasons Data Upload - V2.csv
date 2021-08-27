@@ -1,0 +1,4 @@
+feature,area,description,verticals,region,business_impact,unique_to_zenoti
+"Hey, This is test titile",Booking,des2,Spa,US,,TRUE
+xyz,Marketing,des3,Fitness;Salon;Spa,US,Lorem ipsumm,FALSE
+Test title,Booking,description,Spa,Europe,,TRUE

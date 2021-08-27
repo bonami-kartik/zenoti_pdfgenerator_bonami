@@ -1,0 +1,97 @@
+.upload-file{
+  padding: 50px 0;
+  border: 1px solid $color-light;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 50%;
+  min-width: 250px;
+  margin: auto;
+  max-width: 600px;
+  .upload-file-container{
+    &:focus{
+      border-color: $color-blue;
+      outline: none;
+    }
+    .upload-container{
+      min-width: 150px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .upload-icon{
+        color: $color-blue-light;
+      }
+    }
+    .upload-text{
+      color: $color-grey-light;
+      font-size: 10px;
+    }
+  }
+  .show-file-container{
+    .documnet-container{
+      position: relative;
+      border: 1px solid $color-blue-light;
+      border-radius: 4px;
+      padding: 10px;
+      width: 110px;
+      text-align: center;
+      margin: auto;
+      .document-icon{
+        color: $color-blue-light;
+      }
+      .trash-button{
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: $color-white;
+        background-color: $color-red;
+        border-color: $color-red;
+        border-radius: 4px;
+        padding: 0px;
+        width: 25px;
+        height: 25px;
+        &:hover,
+        &:focus,
+        &:active,
+        &:disabled{
+          color: $color-white;
+          background-color: $color-red !important;
+          border-color: $color-red !important;
+          outline: none;
+          box-shadow: none;        
+        }
+      }
+    }
+    .file-name{
+      font-size: 13px;
+      margin-top: 10px;
+      color: $color-grey-light;  
+    }
+  }
+}
+.header-text{
+  color: $color-blue;
+}
+.field-instruction{
+  margin-bottom: 10px;
+  .field-name{
+    font-size: 14px;
+    color: $color-grey; 
+    line-height: 30px;
+  }
+  .field-info{
+    display: flex;
+  }
+  .field-info-title{
+    flex: 3;
+    font-size: 13px;
+    color: $color-grey-light;
+  }
+  .field-info-value{
+    flex: 7;
+    font-size: 13px;
+    color: $color-grey-light;
+  }
+}

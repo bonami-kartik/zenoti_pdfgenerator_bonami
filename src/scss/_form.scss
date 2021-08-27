@@ -1,0 +1,100 @@
+.form-group{  
+  label{
+    color: $color-grey;
+    font-size: 14px;
+  }
+
+  input{
+    height: 3rem;
+    border-radius: 8px;
+    &:focus{
+      border-color: $color-blue-light;
+      box-shadow: 0 0 0 0.2rem $color-blue-light;
+    }
+  }
+
+  input[type=checkbox], 
+  input[type=radio]{
+    &:focus{
+      border-color: none;
+      box-shadow: none;
+    }
+  }
+  textarea{
+    border-radius: 8px;
+    @extend .scroll-bar;
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &:focus{
+      border-color: $color-blue-light !important;      
+      box-shadow: 0 0 0 0.2rem $color-blue-light !important;
+    }
+  }
+}
+.input-group-text{
+  border-radius: 4px;
+}
+.input-group-append {
+  margin-left: -2px;
+}
+.form-group-appned input {
+  font-size: 14px;
+  border-radius: 4px;
+}
+.form-group-appned:focus-within{
+  border-radius: 4px;
+  box-shadow: 0 0 0 0.2rem $color-blue-light;
+  input{
+    &:focus{
+      box-shadow: none; 
+    }
+  }
+}
+.form-error {
+  color: $color-red;
+  font-size: 10px;
+  margin-top: 0.25rem;
+  width: 100%;
+}
+.form-select{
+  &__control{
+    min-height: 3rem;
+    .form-select__value-container,
+    .form-select__indicators{
+      min-height: 3rem;
+    }
+    input{
+      height: auto;
+      &:focus{
+        box-shadow: none;
+        border: none;
+      }
+    }
+    .form-select__indicator{
+      cursor: pointer;
+    }
+    &--is-focused,
+    &--menu-is-open{
+      border-color: $color-blue-light !important;      
+      box-shadow: 0 0 0 0.2rem $color-blue-light !important;
+    }
+  }
+  &__option{
+    &--is-selected{
+      background-color: $color-green !important;
+      &.form-select__option--is-focused{
+        background-color: $color-green !important;
+      }
+    }
+    &--is-focused{
+      background-color: $color-grey-light !important;
+    }
+  }
+}
+
+.search-icon{
+  background: $color-white;
+  color: $color-grey-light;
+  font-size: 14px;
+}

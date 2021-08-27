@@ -1,0 +1,44 @@
+.analytics-card{
+  border-radius: 1rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+  min-height: 100%;
+
+  .title{
+    color: $color-blue;
+  }
+}
+
+.date-filter-button{
+  margin-right: 0.5rem;
+}
+
+.container-chart{
+  padding: 0;
+  width: 100%;
+}
+
+
+.analytics-icon-color{
+  color: #dddfeb;
+}
+.legend-cont{
+  marginTop:20px;
+}
+.canvas-cont{
+ height:350px;
+}
+
+@media only screen and (max-width: 767px) {
+  .endDate{
+    padding-top: 1rem
+  }
+  .legend-cont{
+    height: fit-content;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .legend-cont{
+    margin-top: 30px;
+  }
+}

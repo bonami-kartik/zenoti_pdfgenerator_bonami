@@ -1,0 +1,12 @@
+.modal-content{
+  border-radius: 8px;
+  .modal-header{
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: $color-blue;
+    color: $color-white;
+  }
+  .close{
+    color: $color-white;
+  }
+}

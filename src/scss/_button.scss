@@ -1,0 +1,65 @@
+
+.btn{
+  font-size: 14px;
+  border-radius: 26px;
+  padding: 10px 30px;
+  &:active{
+    outline: none;
+  }
+  &:disabled{
+    cursor: not-allowed;
+  }
+}
+.btn-sm{
+  border-radius: 26px;
+  padding: 5px 20px;
+  &:active{
+    outline: none;
+  }
+}
+.btn-primary{
+  background-color: $color-green;
+  border-color: $color-green;
+  opacity: 0.9;
+  &:hover,
+  &:hover,
+  &:focus,
+  &:active{
+    opacity: 1;
+  }
+  &:disabled{
+    opacity: 0.5;
+  }
+  &:hover,
+  &:focus,
+  &:active,
+  &:disabled{
+    background-color: $color-green !important;
+    border-color: $color-green !important;
+    outline: none;
+    box-shadow: none;
+  }
+}
+.btn-secondary{
+  background-color: $color-grey-light;
+  border-color: $color-grey-light;
+  opacity: 0.9;
+  &:hover,
+  &:hover,
+  &:focus,
+  &:active{
+    opacity: 1;
+  }
+  &:disabled{
+    opacity: 0.5;
+  }
+  &:hover,
+  &:focus,
+  &:active,
+  &:disabled{
+    background-color: $color-grey-light !important;
+    border-color: $color-grey-light !important;
+    outline: none;
+    box-shadow: none;
+  }
+}
