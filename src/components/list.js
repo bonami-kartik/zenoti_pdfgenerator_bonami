@@ -41,11 +41,12 @@ const List = () => {
   const [countryOption, setCountryOption] = useState([]);
   const [pageSize, setPageSize] = useState(10);
   const [areaFilterOption, setAreaFilterOption] = useState([]);
-  const [idFilterOption, setIdFilterOption] = useState([]);
   const [filter, setFilter] = useState({
     vertical: "",
     country: "",
     competitor: "",
+    area: "",
+    business_benefits: "",
   });
 
   useEffect(() => {
@@ -105,7 +106,7 @@ const List = () => {
       );
       const regex = new RegExp(`${searchValueText}`, "ig");
       context.searchString = searchValueText;
-      defaultData.forEach((data) => {
+      tableData.forEach((data) => {
         const searchObj = {
           title: data.title,
           area: data.area,
@@ -121,14 +122,14 @@ const List = () => {
         }
       });
     } else {
-      searchData = [...defaultData];
+      searchData = [...tableData];
     }
 
     setTableData(searchData);
     setTimeout(() => {
       if (grid) grid.api.refreshCells({ columns: ["note"], force: true });
     }, 1000);
-  }, [searchValue, defaultData]);
+  }, [searchValue]);
 
   const onGridReady = (grid) => {
     setGrid(grid);
@@ -149,11 +150,6 @@ const List = () => {
           filterType: "text",
           type: "equals",
         },
-        competitor: {
-          filter: filter.competitor,
-          filterType: "text",
-          type: "equals",
-        },
       });
       grid.api.deselectAll();
     }
@@ -161,10 +157,10 @@ const List = () => {
 
   useEffect(() => {
     let areaList = new Set();
-    let DataList = [];
+    let DataList = new Set();
 
     defaultData.forEach((d) => {
-      if (!filter.country && !filter.vertical) {
+      if (!filter.country && !filter.vertical && !filter.competitor) {
         areaList.add(d.area);
       } else if (!filter.vertical && filter.country) {
         if (d.country.toLowerCase() === filter.country.toLowerCase()) {
@@ -189,34 +185,54 @@ const List = () => {
         }
       }
 
-      if (filter.competitor && d.competitor) {
+      // Area, Business Impact, Competitor Filters
+
+      if (filter.competitor && d.competitor && filter.area) {
+        if (
+          (d.competitor[filter.competitor] === "N" ||
+            d.competitor[filter.competitor] === "NIA") &&
+          filter.area === d.area
+        ) {
+          DataList.add(d);
+        }
+      }else if (!filter.competitor && filter.area) {
+        if (filter.area === d.area) {
+          DataList.add(d);
+        }
+      }else if (filter.competitor && d.competitor && !filter.area) {
         if (
           d.competitor[filter.competitor] === "N" ||
           d.competitor[filter.competitor] === "NIA"
         ) {
-          DataList.push(d);
+          DataList.add(d);
         }
       }
-
-      if (
-        filter.vertical == "" &&
-        filter.country == "" &&
-        filter.competitor == ""
-      ) {
-        DataList = [];
-        DataList.push(d);
-      }
     });
+    
 
-    if (filter.competitor) {
-      console.log(DataList);
-      setTableData(Array.from(DataList));
+    if(filter.business_benefits) {
+      setSearchValue(filter.business_benefits);
     }
+
+    if (filter.competitor || filter.area) {
+      setTableData(Array.from(DataList));
+    } else {
+      setTableData(defaultData);
+    }
+
     setAreaFilterOption(Array.from(areaList));
     if (grid) {
       grid.api.destroyFilter("area");
     }
-  }, [grid, defaultData, filter.vertical, filter.country, filter.competitor]);
+  }, [
+    grid,
+    defaultData,
+    filter.vertical,
+    filter.country,
+    filter.competitor,
+    filter.area,
+    filter.business_benefits
+  ]);
 
   const changePageSize = (size) => {
     setPageSize(Number(size));
@@ -307,12 +323,6 @@ const List = () => {
         return val1 ? -1 : 1;
       },
       cellRenderer: "highlightCellRenderer",
-      hide: true,
-    },
-    {
-      headerName: "ID",
-      field: "id",
-      filterParams: { options: idFilterOption },
       hide: true,
     },
     {

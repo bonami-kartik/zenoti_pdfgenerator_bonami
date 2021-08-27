@@ -19,6 +19,15 @@
   color: black;
 }
 
+.selectFilter {
+  // border-radius: 10px 10px 10px 10px;
+  // border: 1px solid #9e9e9e;
+  margin: 5px;
+  background-color: transparent;
+  color: black;
+  text-align-last: center;
+}
+
 .buttonClass:hover {
   border-radius: 10px 10px 10px 10px !important;
   border: 1px solid #9e9e9e !important;

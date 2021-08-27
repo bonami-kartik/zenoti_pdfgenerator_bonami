@@ -58,7 +58,7 @@
     },
     {
         "business_benefits": "Streamline operations, unify the business",
-        "area": "R&A",
+        "area": "",
         "differentiator": true,
         "updatedAt": 1625763598150,
         "vertical": [
@@ -76,7 +76,7 @@
         "competitor": {"Booker": "N","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
     },
     {
-        "business_benefits": "Streamline operations, unify the business",
+        "business_benefits": "unify the business",
         "area": "R&A",
         "differentiator": true,
         "updatedAt": 1625763585287,
