@@ -69,7 +69,9 @@ const NavbarComponent = () => {
           </Navbar.Collapse>
         </Navbar>
       </Col>
+      <div className="navbar-separator-div">
       <div className="navbar-separator"></div>
+      </div>
     </Row>
     <Modal show={logoutModal} onHide={() => toggleLogoutModal()}>
       <Modal.Header closeButton>

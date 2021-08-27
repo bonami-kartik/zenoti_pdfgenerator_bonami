@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
-
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import HighlightCellRenderer from '../components/HighlightCellRenderer';
@@ -60,7 +59,7 @@ const Table = ({
   }, [sortableAll, filterAll, rowSelection]);
 
   return (
-    <div className="ag-theme-alpine" style={{ height: "70vh" }}>
+    <div className="ag-theme-alpine formtableBorder" style={{ height: "60vh" }}>
       <AgGridReact
         key={Object.keys(defaultColDef).length}
         headerHeight={HeaderHeight}

@@ -1,0 +1,112 @@
+.formBorder {
+  font-family: "Open Sans";
+  border-radius: 10px 10px 10px 10px;
+  border: 1px solid #9e9e9e;
+}
+
+.formtableBorder {
+  font-family: "Open Sans";
+  border-radius: 10px 10px 10px 10px;
+  border: 1px solid #9e9e9e;
+  box-shadow: 10px 10px 10px #cad4d7;
+}
+
+.buttonClass {
+  border-radius: 10px 10px 10px 10px;
+  border: 1px solid #9e9e9e;
+  margin: 5px;
+  background-color: transparent;
+  color: black;
+}
+
+.buttonClass:hover {
+  border-radius: 10px 10px 10px 10px !important;
+  border: 1px solid #9e9e9e !important;
+  margin: 5px !important;
+  background-color: grey !important;
+  color: black !important;
+}
+
+// .buttonClass :hover {
+//     border-radius: 10px 10px 10px 10px;
+//     border: 1px solid #9e9e9e;
+//     margin: 5px;
+//     background-color: white;
+//     color: black;
+//   }
+
+.section-padding {
+  padding: 1.8rem;
+}
+
+.filter-scroll {
+  height: 35vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.switch {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+.round {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 40%;
+  height: 40px;
+  background: #00b6ed;
+  display: block;
+  border-radius: 100px;
+  position: relative;
+}
+.plus_image {
+  width: 3%;
+  float: right;
+  cursor: pointer;
+}
+.round:after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border-radius: 90px;
+  transition: 0.3s;
+}
+
+.switch:checked + .round {
+  background: #33ad6a;
+}
+
+.switch:checked + .round:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+
+.round:active:after {
+  width: 30px;
+}
+
+.d-flex > .add-btn {
+  border-radius: 10px 10px 10px 10px !important;
+  border: 1px solid #9e9e9e !important;
+  margin: 5px !important;
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.ag-row-no-focus {
+  background-color: #e9f6f9 !important;
+}
+
+.ag-header-cell-label > span > svg {
+  display: none !important;
+}
+
+// @media (min-width: 320px) and (max-width: 637px) {
+
+// }

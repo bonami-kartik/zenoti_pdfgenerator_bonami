@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { getToken, removeItemFromStorage } from '../utils/helper';
-
-const baseUrl = process.env.API_URL;
+import axios from "axios";
+import { getToken, removeItemFromStorage } from "../utils/helper";
+// const baseUrl = process.env.API_URL;
+const baseUrl = "https://o9n1hpb6l8.execute-api.ap-south-1.amazonaws.com/prod";
 
 const HandleError = (err) => {
   if (err.response && err.response.status === 401) {
-    removeItemFromStorage('user');
+    removeItemFromStorage("user");
   }
   if (err.response && err.response.data) {
     throw err.response.data;
@@ -18,7 +18,7 @@ const HandleError = (err) => {
 
 const getConfig = () => {
   return {
-    'Authorization': getToken(),
+    Authorization: getToken(),
   };
 };
 export const publicGet = (url, params) => {

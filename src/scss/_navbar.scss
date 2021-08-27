@@ -69,6 +69,11 @@
 }
 .navbar-separator{
   height: 3px;
-  width: 100%;
+  width: 97%;
   background-image: linear-gradient(to right, $color-green 0%, $color-blue-light 50%, $color-blue 100%);
+}
+
+.navbar-separator-div{
+ width: 100%;
+ text-align: -webkit-center;
 }
