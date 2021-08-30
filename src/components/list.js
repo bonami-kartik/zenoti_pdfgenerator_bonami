@@ -47,6 +47,7 @@ const List = () => {
     competitor: "",
     area: "",
     business_benefits: "",
+    uniqueZenoti: false,
   });
 
   useEffect(() => {
@@ -96,40 +97,39 @@ const List = () => {
     setFecthing(false);
   }, []);
 
-  useEffect(() => {
-    let searchData = [];
-    if (searchValue) {
-      let searchValueText = searchValue;
-      searchValueText = searchValueText.replace(
-        /[-[\]{}()*+?.,\\^$|#\s]/g,
-        "\\$&"
-      );
-      const regex = new RegExp(`${searchValueText}`, "ig");
-      context.searchString = searchValueText;
-      tableData.forEach((data) => {
-        const searchObj = {
-          title: data.title,
-          area: data.area,
-          business_benefits: data.business_benefits,
-          country: data.country,
-          description: data.description,
-          differentiator: data.differentiator ? "Yes" : "No",
-          vertical: data.vertical.join(),
-          note: data.note || "",
-        };
-        if (Object.values(searchObj).join().match(regex)) {
-          searchData.push(data);
-        }
-      });
-    } else {
-      searchData = [...tableData];
-    }
-
-    setTableData(searchData);
-    setTimeout(() => {
-      if (grid) grid.api.refreshCells({ columns: ["note"], force: true });
-    }, 1000);
-  }, [searchValue]);
+  // useEffect(() => {
+  //   let searchData = [];
+  //   if (searchValue) {
+  //     let searchValueText = searchValue;
+  //     searchValueText = searchValueText.replace(
+  //       /[-[\]{}()*+?.,\\^$|#\s]/g,
+  //       "\\$&"
+  //     );
+  //     const regex = new RegExp(`${searchValueText}`, "ig");
+  //     context.searchString = searchValueText;
+  //     defaultData.forEach((data) => {
+  //       const searchObj = {
+  //         title: data.title,
+  //         area: data.area,
+  //         business_benefits: data.business_benefits,
+  //         country: data.country,
+  //         description: data.description,
+  //         differentiator: data.differentiator ? "Yes" : "No",
+  //         vertical: data.vertical.join(),
+  //         note: data.note || "",
+  //       };
+  //       if (Object.values(searchObj).join().match(regex)) {
+  //         searchData.push(data);
+  //       }
+  //     });
+  //   } else {
+  //     searchData = [...defaultData];
+  //   }
+  //   setTableData(searchData);
+  //   setTimeout(() => {
+  //     if (grid) grid.api.refreshCells({ columns: ["note"], force: true });
+  //   }, 1000);
+  // }, [searchValue, defaultData]);
 
   const onGridReady = (grid) => {
     setGrid(grid);
@@ -154,6 +154,37 @@ const List = () => {
       grid.api.deselectAll();
     }
   }, [filter.vertical, filter.country]);
+
+  const BusinessImpactFilter = (value, DataList) => {
+    let searchData = [];
+    let searchValueText = value;
+    searchValueText = searchValueText.replace(
+      /[-[\]{}()*+?.,\\^$|#\s]/g,
+      "\\$&"
+    );
+    const regex = new RegExp(`${searchValueText}`, "ig");
+    context.searchString = searchValueText;
+    DataList.forEach((data) => {
+      const searchObj = {
+        business_benefits: data.business_benefits,
+      };
+      if (Object.values(searchObj).join().match(regex)) {
+        searchData.push(data);
+      }
+    });
+    return searchData;
+  };
+
+  const ToggleFilter = (value, DataList) => {
+    let uniqueValue = [];
+    DataList.forEach((data) => {
+      if (value === data.differentiator) {
+        uniqueValue.push(data);
+      }
+    });
+
+    return uniqueValue;
+  };
 
   useEffect(() => {
     let areaList = new Set();
@@ -185,40 +216,47 @@ const List = () => {
         }
       }
 
-      // Area, Business Impact, Competitor Filters
+      // uniqueZenoti Filter
 
+      // Area, Business Impact, Competitor Filters
       if (filter.competitor && d.competitor && filter.area) {
         if (
           (d.competitor[filter.competitor] === "N" ||
             d.competitor[filter.competitor] === "NIA") &&
-          filter.area === d.area
+          filter.area.toLowerCase() === d.area.toLowerCase()
         ) {
           DataList.add(d);
         }
-      }else if (!filter.competitor && filter.area) {
-        if (filter.area === d.area) {
+      } else if (!filter.competitor && filter.area) {
+        if (filter.area.toLowerCase() === d.area.toLowerCase()) {
           DataList.add(d);
         }
-      }else if (filter.competitor && d.competitor && !filter.area) {
+      } else if (
+        filter.competitor &&
+        d.competitor &&
+        !filter.area &&
+        !filter.uniqueZenoti
+      ) {
         if (
           d.competitor[filter.competitor] === "N" ||
           d.competitor[filter.competitor] === "NIA"
         ) {
           DataList.add(d);
         }
+      } else if (!filter.competitor && !filter.area) {
+        DataList.add(d);
       }
     });
-    
 
-    if(filter.business_benefits) {
-      setSearchValue(filter.business_benefits);
+    if (filter.business_benefits) {
+      DataList = BusinessImpactFilter(filter.business_benefits, DataList);
     }
 
-    if (filter.competitor || filter.area) {
-      setTableData(Array.from(DataList));
-    } else {
-      setTableData(defaultData);
+    if (filter.uniqueZenoti) {
+      DataList = ToggleFilter(filter.uniqueZenoti, DataList);
     }
+
+    setTableData(Array.from(DataList));
 
     setAreaFilterOption(Array.from(areaList));
     if (grid) {
@@ -231,7 +269,8 @@ const List = () => {
     filter.country,
     filter.competitor,
     filter.area,
-    filter.business_benefits
+    filter.uniqueZenoti,
+    filter.business_benefits,
   ]);
 
   const changePageSize = (size) => {
@@ -518,11 +557,7 @@ const List = () => {
                 variant="primary"
                 type="button"
                 onClick={() => openPdfModal()}
-                disabled={
-                  selectedRows.length === 0 ||
-                  filter.country === "" ||
-                  filter.vertical === ""
-                }
+                disabled={selectedRows.length === 0}
               >
                 Generate PDF
               </Button>

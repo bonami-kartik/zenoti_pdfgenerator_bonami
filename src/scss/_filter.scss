@@ -29,20 +29,19 @@
 }
 
 .buttonClass:hover {
-  border-radius: 10px 10px 10px 10px !important;
-  border: 1px solid #9e9e9e !important;
-  margin: 5px !important;
-  background-color: grey !important;
-  color: black !important;
+  border-radius: 10px 10px 10px 10px;
+  border: 1px solid #9e9e9e;
+  margin: 5px;
+  background-color: grey;
+  color: black;
 }
-
-// .buttonClass :hover {
-//     border-radius: 10px 10px 10px 10px;
-//     border: 1px solid #9e9e9e;
-//     margin: 5px;
-//     background-color: white;
-//     color: black;
-//   }
+.buttonClass-active{
+  border-radius: 10px 10px 10px 10px;
+  border: 1px solid #9e9e9e;
+  margin: 5px;
+  background-color: #00b6ed;
+  color: black;
+}
 
 .section-padding {
   padding: 1.8rem;
@@ -109,6 +108,10 @@
 }
 
 .ag-row-no-focus {
+  background-color: #e9f6f9 !important;
+}
+.ag-theme-alpine .ag-row-odd,
+.ag-theme-alpine .ag-row-even {
   background-color: #e9f6f9 !important;
 }
 

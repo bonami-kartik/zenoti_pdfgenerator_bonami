@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { ReactDOM } from "react";
 import { Row, Col, Form, FormGroup, FormLabel, Button } from "react-bootstrap";
 import Select from "react-select";
 
@@ -18,6 +19,8 @@ const FilterComponent = ({
 
   const [businessFilter, setBusinessFilter] = useState("");
 
+  const [uniqueZenoti, setUniqueZenoti] = useState(false);
+
   const applyFilter = () => {
     handleFilterChange({
       vertical: verticalFilter,
@@ -25,23 +28,74 @@ const FilterComponent = ({
       competitor: competitorFilter,
       area: areaFilter,
       business_benefits: businessFilter,
+      uniqueZenoti,
     });
   };
 
+  useEffect(() => {
+    handleFilterChange({
+      vertical: verticalFilter,
+      country: regionFilter,
+      competitor: competitorFilter,
+      area: areaFilter,
+      business_benefits: businessFilter,
+      uniqueZenoti,
+    });
+  }, [uniqueZenoti]);
+
   const resetFilter = () => {
+    const AllButton = document.querySelectorAll(".buttonClass");
+    AllButton.forEach((data) => {
+      if (data.classList.value.includes("buttonClass-active")) {
+        data.classList.remove("buttonClass-active");
+      }
+    });
+    document.getElementById("switch").checked = false;
     setVerticalFilter("");
     setRegionFilter("");
     setCompetitorFilter("");
     setAreaFilter("");
     setBusinessFilter("");
+    setUniqueZenoti(false);
     const filterObj = { ...filter };
     Object.keys(filterObj).map((key) => (filterObj[key] = ""));
     handleFilterChange(filterObj);
   };
 
   const Competitor = ["Booker", "MBO", "Salonbiz", "Phorest"];
-  const Area = ["R&A", "Packages", "Payments", "Reports & Analytics", "All"];
+  const Area = ["R&A", "Packages", "Payments", "Reports & Analytics"];
   const BusinessBenefits = ["Streamline operations", "unify the business"];
+
+  const onChange = (index, value, Filter) => {
+    const firstvalue = index.split("_");
+    const spanButton = document.querySelector(`#${index}`);
+
+    const spanButtonAll = document.querySelectorAll(`.${firstvalue[0]}`);
+
+    if (firstvalue[0] == "Competitor") {
+      if (spanButton.classList.value.includes("buttonClass-active")) {
+        spanButton.classList.remove("buttonClass-active");
+        Filter("");
+      } else {
+        spanButton.classList.add("buttonClass-active");
+        Filter(value);
+      }
+    } else {
+      if (spanButton.classList.value.includes("buttonClass-active")) {
+        spanButton.classList.remove("buttonClass-active");
+        Filter("");
+      } else {
+        spanButtonAll.forEach((data) => {
+          if (data.classList.value.includes("buttonClass-active")) {
+            data.classList.remove("buttonClass-active");
+          }
+        });
+        spanButton.classList.add("buttonClass-active");
+        Filter(value);
+      }
+    }
+  };
+
   return (
     <div className="formBorder section-padding" style={{ height: "60vh" }}>
       {/* <Col className="col-lg-80 align-self-center">
@@ -55,21 +109,25 @@ const FilterComponent = ({
             <h6>
               <b>Vertical</b>
             </h6>
-            {verticalOption.map(({ label, value }) => {
+            {verticalOption.map(({ value }, index) => {
               return (
-                <Button
-                  className="buttonClass"
+                <span
+                  className="buttonClass btn btn-sm verticalOption"
                   key={value}
+                  id={`verticalOption_${index}`}
                   size="sm"
-                  onClick={() => setVerticalFilter(value)}
+                  onClick={() =>
+                    onChange(
+                      `verticalOption_${index}`,
+                      value,
+                      setVerticalFilter
+                    )
+                  }
                 >
-                  {label}
-                </Button>
+                  {value}
+                </span>
               );
             })}
-            {verticalFilter && (
-              <div className="selectFilter">{verticalFilter}</div>
-            )}
             <hr />
           </Col>
         </Row>
@@ -79,19 +137,21 @@ const FilterComponent = ({
             <h6>
               <b>Select Region</b>
             </h6>
-            {countryOption.map((country) => {
+            {countryOption.map((country, index) => {
               return (
-                <Button
-                  className="buttonClass"
+                <span
+                  className="buttonClass btn btn-sm countryOption"
                   key={country}
+                  id={`countryOption_${index}`}
                   size="sm"
-                  onClick={() => setRegionFilter(country)}
+                  onClick={() =>
+                    onChange(`countryOption_${index}`, country, setRegionFilter)
+                  }
                 >
                   {country}
-                </Button>
+                </span>
               );
             })}
-            {regionFilter && <div className="selectFilter">{regionFilter}</div>}
             <hr />
           </Col>
         </Row>
@@ -101,22 +161,21 @@ const FilterComponent = ({
             <h6>
               <b>Competitor</b>
             </h6>
-            {Competitor.map((data) => {
+            {Competitor.map((data, index) => {
               return (
-                <Button
-                  className="buttonClass"
+                <span
+                  className="buttonClass btn btn-sm Competitor"
                   key={data}
-                  id={data}
+                  id={`Competitor_${index}`}
                   size="sm"
-                  onClick={() => setCompetitorFilter(data)}
+                  onClick={() =>
+                    onChange(`Competitor_${index}`, data, setCompetitorFilter)
+                  }
                 >
                   {data}
-                </Button>
+                </span>
               );
             })}
-            {competitorFilter && (
-              <div className="selectFilter">{competitorFilter}</div>
-            )}
             <hr />
           </Col>
         </Row>
@@ -125,22 +184,25 @@ const FilterComponent = ({
             <h6>
               <b>Available for small business</b>
             </h6>
-            {Competitor.map((data) => {
+            {Competitor.map((data, index) => {
               return (
-                <Button
-                  className="buttonClass"
+                <span
+                  className="buttonClass btn btn-sm Aval_Business"
                   key={data}
-                  id={data}
+                  id={`Aval_Business_${index}`}
                   size="sm"
-                  onClick={() => setCompetitorFilter(data)}
+                  onClick={() =>
+                    onChange(
+                      `Aval_Business_${index}`,
+                      data,
+                      setCompetitorFilter
+                    )
+                  }
                 >
                   {data}
-                </Button>
+                </span>
               );
             })}
-            {competitorFilter && (
-              <div className="selectFilter">{competitorFilter}</div>
-            )}
             <hr />
           </Col>
         </Row>
@@ -149,20 +211,19 @@ const FilterComponent = ({
             <h6>
               <b>Area</b>
             </h6>
-            {Area.map((data) => {
+            {Area.map((data, index) => {
               return (
-                <Button
-                  className="buttonClass"
-                  key={data}
-                  id={data}
+                <span
+                  className="buttonClass btn btn-sm Area"
+                  key={`Area_${index}`}
+                  id={`Area_${index}`}
                   size="sm"
-                  onClick={() => setAreaFilter(data)}
+                  onClick={() => onChange(`Area_${index}`, data, setAreaFilter)}
                 >
                   {data}
-                </Button>
+                </span>
               );
             })}
-            {areaFilter && <div className="selectFilter">{areaFilter}</div>}
             <hr />
           </Col>
         </Row>
@@ -171,22 +232,21 @@ const FilterComponent = ({
             <h6>
               <b>Business Impact</b>
             </h6>
-            {BusinessBenefits.map((data) => {
+            {BusinessBenefits.map((data, index) => {
               return (
-                <Button
-                  className="buttonClass"
+                <span
+                  className="buttonClass btn btn-sm Business"
                   key={data}
-                  id={data}
+                  id={`Business_${index}`}
                   size="sm"
-                  onClick={() => setBusinessFilter(data)}
+                  onClick={() =>
+                    onChange(`Business_${index}`, data, setBusinessFilter)
+                  }
                 >
                   {data}
-                </Button>
+                </span>
               );
             })}
-            {businessFilter && (
-              <div className="selectFilter">{businessFilter}</div>
-            )}
             <hr />
           </Col>
         </Row>
@@ -198,7 +258,14 @@ const FilterComponent = ({
             <b>Unique to Zenoti</b>
           </h6>
           <div className="d-flex justify-content-center">
-            <input type="checkbox" id="switch" className="switch" />
+            <input
+              type="checkbox"
+              id="switch"
+              className="switch"
+              onChange={() => {
+                setUniqueZenoti(!uniqueZenoti);
+              }}
+            />
             <label className="round" htmlFor="switch">
               Toggle
             </label>
