@@ -349,7 +349,6 @@ const List = () => {
         });
       }
     });
-    console.log(DataList);
     return DataList;
   };
   useEffect(() => {

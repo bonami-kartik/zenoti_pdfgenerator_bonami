@@ -24,7 +24,6 @@ const FilterComponent = ({
   const [scrollOpen, setScrollOpen] = useState(false);
 
   const applyFilter = () => {
-    console.log(competitorFilter);
     handleFilterChange({
       vertical: verticalFilter,
       country: regionFilter,
