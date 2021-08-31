@@ -21,6 +21,8 @@ const FilterComponent = ({
 
   const [uniqueZenoti, setUniqueZenoti] = useState(false);
 
+  const [scrollOpen, setScrollOpen] = useState(false);
+
   const applyFilter = () => {
     console.log(competitorFilter);
     handleFilterChange({
@@ -106,14 +108,17 @@ const FilterComponent = ({
   return (
     <div
       className="formBorder section-padding filterHeight"
-      style={{ height: "60vh" }}
+      style={{ height: "65vh" }}
     >
       {/* <Col className="col-lg-80 align-self-center">
         <FormLabel className="mb-0">Filter:</FormLabel>
       </Col> */}
 
       {/* <FormLabel className="mb-0">Filter:</FormLabel> */}
-      <div className="filter-scroll">
+      <div
+        className="filter-scroll"
+        style={!scrollOpen ? { overflow: "hidden" } : { overflowY: "auto" }}
+      >
         <Row>
           <Col md={12}>
             <h6>
@@ -169,7 +174,7 @@ const FilterComponent = ({
         <Row>
           <Col md={12}>
             <h6>
-              <b>Competitor</b>
+              <b>Compare With</b>
             </h6>
             {Competitor.map((data, index) => {
               return (
@@ -257,12 +262,17 @@ const FilterComponent = ({
                 </span>
               );
             })}
-            <hr />
           </Col>
         </Row>
       </div>
       <Row>
         <Col md={12}>
+          <a
+            className="view_all_filter"
+            onClick={() => setScrollOpen(!scrollOpen)}
+          >
+            <b>View All ...</b>
+          </a>
           <h6 className="mb-3">
             <hr />
             <b>Unique to Zenoti</b>

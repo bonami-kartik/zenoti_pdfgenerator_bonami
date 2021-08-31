@@ -518,11 +518,19 @@ const List = () => {
           <div className="card mb-5">
             <h5 className="card-header generate-pdf-card-header text-center">
               Steps to generate PDF
-              <img
-                src="../assets/plus2.png"
-                className="plus_image"
-                onClick={imageDropDown}
-              />
+              {!steps ? (
+                <img
+                  src="../assets/plus2.png"
+                  className="plus_image"
+                  onClick={imageDropDown}
+                />
+              ) : (
+                <img
+                  src="../assets/minus.png"
+                  className="plus_image"
+                  onClick={imageDropDown}
+                />
+              )}
             </h5>
             {steps && (
               <div className="card-body generate-pdf-card-body">

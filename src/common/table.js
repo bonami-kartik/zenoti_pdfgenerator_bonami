@@ -59,7 +59,7 @@ const Table = ({
   }, [sortableAll, filterAll, rowSelection]);
 
   return (
-    <div className="ag-theme-alpine formtableBorder" style={{ height: "60vh" }}>
+    <div className="ag-theme-alpine formtableBorder" style={{ height: "65vh" }}>
       <AgGridReact
         key={Object.keys(defaultColDef).length}
         headerHeight={HeaderHeight}
