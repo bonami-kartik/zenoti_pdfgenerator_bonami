@@ -128,7 +128,8 @@
         "id": "05ddd0d0-d392-11eb-ac7a-09bf441b60dd",
         "product_feature": null,
         "country": "UK",
-        "title": "Benchmarking Analytics"
+        "title": "Benchmarking Analytics",
+        "competitor": {"Booker": "Y","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
     },
     {
         "business_benefits": "Streamline operations, unify the business",
@@ -145,7 +146,8 @@
         "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
         "id": "05b6547e-d392-11eb-a3fa-09bf441b60dd",
         "country": "US",
-        "title": "Benchmarking Analytics"
+        "title": "Benchmarking Analytics",
+        "competitor": {"Booker": "Y","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
     },
     {
         "business_benefits": "Streamline operations, unify the business",
@@ -162,7 +164,8 @@
         "description": "You can tailor promotions to apply to regions or even specific locations. This means you can help a new franchisee launch a new location with great specials.",
         "id": "2317ba5f-91f4-11eb-9ff6-31a4012fb815",
         "country": "US",
-        "title": "Regional or location-level membership promotions"
+        "title": "Regional or location-level membership promotions",
+        "competitor": {"Booker": "Y","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
     },
     {
         "business_benefits": "Streamline operations, unify the business",

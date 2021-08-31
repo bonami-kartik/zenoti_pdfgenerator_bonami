@@ -119,6 +119,18 @@
   display: none !important;
 }
 
-// @media (min-width: 320px) and (max-width: 637px) {
+@media (min-width: 320px) and (max-width: 924px) {
+.filterButton{
+ width: 50% !important;
+}
 
-// }
+.filterHeight {
+  height: 62vh !important;
+}
+}
+
+@media (min-width: 1024px) and (max-width: 1400px) {
+  .btn {
+    font-size: 12px;
+  }
+}

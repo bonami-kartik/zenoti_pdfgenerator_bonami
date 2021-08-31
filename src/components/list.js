@@ -155,169 +155,6 @@ const List = () => {
     }
   }, [filter.vertical, filter.country]);
 
-  const BusinessImpactFilter = (value, DataList) => {
-    let searchData = [];
-    let searchValueText = value;
-    searchValueText = searchValueText.replace(
-      /[-[\]{}()*+?.,\\^$|#\s]/g,
-      "\\$&"
-    );
-    const regex = new RegExp(`${searchValueText}`, "ig");
-    context.searchString = searchValueText;
-    DataList.forEach((data) => {
-      const searchObj = {
-        business_benefits: data.business_benefits,
-      };
-      if (Object.values(searchObj).join().match(regex)) {
-        searchData.push(data);
-      }
-    });
-    return searchData;
-  };
-
-  const ToggleFilter = (value, DataList) => {
-    let uniqueValue = [];
-    DataList.forEach((data) => {
-      if (value === data.differentiator) {
-        uniqueValue.push(data);
-      }
-    });
-
-    return uniqueValue;
-  };
-
-  useEffect(() => {
-    let areaList = new Set();
-    let DataList = new Set();
-
-    defaultData.forEach((d) => {
-      if (!filter.country && !filter.vertical && !filter.competitor) {
-        areaList.add(d.area);
-      } else if (!filter.vertical && filter.country) {
-        if (d.country.toLowerCase() === filter.country.toLowerCase()) {
-          areaList.add(d.area);
-        }
-      } else if (!filter.country && filter.vertical) {
-        if (
-          d.vertical.some(
-            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
-          )
-        ) {
-          areaList.add(d.area);
-        }
-      } else {
-        if (
-          d.country.toLowerCase() === filter.country.toLowerCase() &&
-          d.vertical.some(
-            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
-          )
-        ) {
-          areaList.add(d.area);
-        }
-      }
-
-      // uniqueZenoti Filter
-
-      // Area, Business Impact, Competitor Filters
-      if (filter.competitor && d.competitor && filter.area) {
-        if (
-          (d.competitor[filter.competitor] === "N" ||
-            d.competitor[filter.competitor] === "NIA") &&
-          filter.area.toLowerCase() === d.area.toLowerCase()
-        ) {
-          DataList.add(d);
-        }
-      } else if (!filter.competitor && filter.area) {
-        if (filter.area.toLowerCase() === d.area.toLowerCase()) {
-          DataList.add(d);
-        }
-      } else if (
-        filter.competitor &&
-        d.competitor &&
-        !filter.area &&
-        !filter.uniqueZenoti
-      ) {
-        if (
-          d.competitor[filter.competitor] === "N" ||
-          d.competitor[filter.competitor] === "NIA"
-        ) {
-          DataList.add(d);
-        }
-      } else if (!filter.competitor && !filter.area) {
-        DataList.add(d);
-      }
-    });
-
-    if (filter.business_benefits) {
-      DataList = BusinessImpactFilter(filter.business_benefits, DataList);
-    }
-
-    if (filter.uniqueZenoti) {
-      DataList = ToggleFilter(filter.uniqueZenoti, DataList);
-    }
-
-    setTableData(Array.from(DataList));
-
-    setAreaFilterOption(Array.from(areaList));
-    if (grid) {
-      grid.api.destroyFilter("area");
-    }
-  }, [
-    grid,
-    defaultData,
-    filter.vertical,
-    filter.country,
-    filter.competitor,
-    filter.area,
-    filter.uniqueZenoti,
-    filter.business_benefits,
-  ]);
-
-  const changePageSize = (size) => {
-    setPageSize(Number(size));
-    grid.api.paginationSetPageSize(Number(size));
-  };
-
-  const openPdfModal = () => {
-    togglePdfModal(!pdfModal);
-  };
-
-  const toggleNoteModal = (data, isEdit, callBack) => {
-    setSelectedRow({ data, isEdit, callBack });
-    toggleModal(!noteModal);
-  };
-
-  const toggleDelteNoteModal = (data, callBack) => {
-    toggleDeleteModal(!deleteNoteModal);
-    setSelectedRow({ data, callBack });
-  };
-
-  const saveNote = (data) => {
-    const tableDataClone = [...defaultData];
-    tableDataClone.map((t) => {
-      if (t.id === selectedRow.data.id) {
-        t.note = data.note;
-      }
-    });
-    selectedRow.callBack();
-    setDefaultData(tableDataClone);
-    setSelectedRow({});
-    toggleModal(!noteModal);
-  };
-
-  const deleteNote = () => {
-    const tableDataClone = [...defaultData];
-    tableDataClone.map((t) => {
-      if (t.id === selectedRow.data.id) {
-        t.note = "";
-      }
-    });
-    selectedRow.callBack();
-    setDefaultData(tableDataClone);
-    setSelectedRow({});
-    toggleDeleteModal(!deleteNoteModal);
-  };
-
   const columnDefs = [
     {
       headerName: "Feature",
@@ -443,6 +280,196 @@ const List = () => {
     },
   ];
 
+  const Competitor = ["Booker", "MBO", "Salonbiz", "Phorest"];
+  Competitor.forEach((data) => {
+    columnDefs.push({
+      headerName: data,
+      flex: 1,
+      field: data,
+      hide: !(filter.competitor.includes(data) && filter.competitor.length > 1),
+    });
+  });
+
+  const BusinessImpactFilter = (value, DataList) => {
+    let searchData = [];
+    let searchValueText = value;
+    searchValueText = searchValueText.replace(
+      /[-[\]{}()*+?.,\\^$|#\s]/g,
+      "\\$&"
+    );
+    const regex = new RegExp(`${searchValueText}`, "ig");
+    context.searchString = searchValueText;
+    DataList.forEach((data) => {
+      const searchObj = {
+        business_benefits: data.business_benefits,
+      };
+      if (Object.values(searchObj).join().match(regex)) {
+        searchData.push(data);
+      }
+    });
+    return searchData;
+  };
+
+  const ToggleFilter = (value, DataList) => {
+    let uniqueValue = [];
+    DataList.forEach((data) => {
+      if (value === data.differentiator) {
+        uniqueValue.push(data);
+      }
+    });
+
+    return uniqueValue;
+  };
+
+  const CompetitorFilter = (value, DataList) => {
+    let competitorValue = [];
+
+    DataList.forEach((data) => {
+      if (data.competitor) {
+        if (
+          data.competitor[value] === "N" ||
+          data.competitor[value] === "NIA"
+        ) {
+          competitorValue.push(data);
+        }
+      }
+    });
+    return competitorValue;
+  };
+
+  const MultipleCompetitorCompare = (value, DataList) => {
+    DataList.forEach((data) => {
+      if (data.competitor) {
+        value.forEach((val) => {
+          if (data.competitor[val] === "N" || data.competitor[val] === "NIA") {
+            data[val] = "✔";
+          } else {
+            data[val] = "✗";
+          }
+        });
+      }
+    });
+    console.log(DataList);
+    return DataList;
+  };
+  useEffect(() => {
+    let areaList = new Set();
+    let DataList = new Set();
+
+    defaultData.forEach((d) => {
+      if (!filter.country && !filter.vertical && !filter.competitor) {
+        areaList.add(d.area);
+      } else if (!filter.vertical && filter.country) {
+        if (d.country.toLowerCase() === filter.country.toLowerCase()) {
+          areaList.add(d.area);
+        }
+      } else if (!filter.country && filter.vertical) {
+        if (
+          d.vertical.some(
+            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+          )
+        ) {
+          areaList.add(d.area);
+        }
+      } else {
+        if (
+          d.country.toLowerCase() === filter.country.toLowerCase() &&
+          d.vertical.some(
+            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+          )
+        ) {
+          areaList.add(d.area);
+        }
+      }
+
+      // uniqueZenoti Filter
+
+      // Area, Business Impact, Competitor Filters
+      if (filter.area) {
+        if (filter.area.toLowerCase() === d.area.toLowerCase()) {
+          DataList.add(d);
+        }
+      } else if (!filter.area) {
+        DataList.add(d);
+      }
+    });
+
+    if (filter.competitor.length === 1) {
+      DataList = CompetitorFilter(filter.competitor[0], DataList);
+    } else if (filter.competitor.length > 1) {
+      DataList = MultipleCompetitorCompare(filter.competitor, DataList);
+    }
+
+    if (filter.business_benefits) {
+      DataList = BusinessImpactFilter(filter.business_benefits, DataList);
+    }
+
+    if (filter.uniqueZenoti) {
+      DataList = ToggleFilter(filter.uniqueZenoti, DataList);
+    }
+
+    setTableData(Array.from(DataList));
+
+    setAreaFilterOption(Array.from(areaList));
+    if (grid) {
+      grid.api.destroyFilter("area");
+    }
+  }, [
+    grid,
+    defaultData,
+    filter.vertical,
+    filter.country,
+    filter.competitor,
+    filter.area,
+    filter.uniqueZenoti,
+    filter.business_benefits,
+  ]);
+
+  const changePageSize = (size) => {
+    setPageSize(Number(size));
+    grid.api.paginationSetPageSize(Number(size));
+  };
+
+  const openPdfModal = () => {
+    togglePdfModal(!pdfModal);
+  };
+
+  const toggleNoteModal = (data, isEdit, callBack) => {
+    setSelectedRow({ data, isEdit, callBack });
+    toggleModal(!noteModal);
+  };
+
+  const toggleDelteNoteModal = (data, callBack) => {
+    toggleDeleteModal(!deleteNoteModal);
+    setSelectedRow({ data, callBack });
+  };
+
+  const saveNote = (data) => {
+    const tableDataClone = [...defaultData];
+    tableDataClone.map((t) => {
+      if (t.id === selectedRow.data.id) {
+        t.note = data.note;
+      }
+    });
+    selectedRow.callBack();
+    setDefaultData(tableDataClone);
+    setSelectedRow({});
+    toggleModal(!noteModal);
+  };
+
+  const deleteNote = () => {
+    const tableDataClone = [...defaultData];
+    tableDataClone.map((t) => {
+      if (t.id === selectedRow.data.id) {
+        t.note = "";
+      }
+    });
+    selectedRow.callBack();
+    setDefaultData(tableDataClone);
+    setSelectedRow({});
+    toggleDeleteModal(!deleteNoteModal);
+  };
+
   const handleFilterChange = ({ vertical, country }) => {
     if (filter.vertical && filter.country) {
       return vertical.includes(filter.vertical) && country === filter.country;
@@ -483,6 +510,7 @@ const List = () => {
   const imageDropDown = () => {
     setSteps(!steps);
   };
+
   return (
     <>
       <Row className="my-3 align-items-center">

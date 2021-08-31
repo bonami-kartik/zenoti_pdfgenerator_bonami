@@ -13,7 +13,7 @@ const FilterComponent = ({
 
   const [regionFilter, setRegionFilter] = useState("");
 
-  const [competitorFilter, setCompetitorFilter] = useState("");
+  const [competitorFilter, setCompetitorFilter] = useState([]);
 
   const [areaFilter, setAreaFilter] = useState("");
 
@@ -22,6 +22,7 @@ const FilterComponent = ({
   const [uniqueZenoti, setUniqueZenoti] = useState(false);
 
   const applyFilter = () => {
+    console.log(competitorFilter);
     handleFilterChange({
       vertical: verticalFilter,
       country: regionFilter,
@@ -53,7 +54,7 @@ const FilterComponent = ({
     document.getElementById("switch").checked = false;
     setVerticalFilter("");
     setRegionFilter("");
-    setCompetitorFilter("");
+    setCompetitorFilter([]);
     setAreaFilter("");
     setBusinessFilter("");
     setUniqueZenoti(false);
@@ -75,10 +76,16 @@ const FilterComponent = ({
     if (firstvalue[0] == "Competitor") {
       if (spanButton.classList.value.includes("buttonClass-active")) {
         spanButton.classList.remove("buttonClass-active");
-        Filter("");
+
+        let newCompetitorFilter = competitorFilter;
+        const index = newCompetitorFilter.indexOf(value);
+        if (index > -1) {
+          newCompetitorFilter.splice(index, 1);
+          Filter(newCompetitorFilter);
+        }
       } else {
         spanButton.classList.add("buttonClass-active");
-        Filter(value);
+        Filter(Array.from(new Set([...competitorFilter, value])));
       }
     } else {
       if (spanButton.classList.value.includes("buttonClass-active")) {
@@ -97,7 +104,10 @@ const FilterComponent = ({
   };
 
   return (
-    <div className="formBorder section-padding" style={{ height: "60vh" }}>
+    <div
+      className="formBorder section-padding filterHeight"
+      style={{ height: "60vh" }}
+    >
       {/* <Col className="col-lg-80 align-self-center">
         <FormLabel className="mb-0">Filter:</FormLabel>
       </Col> */}
@@ -275,7 +285,11 @@ const FilterComponent = ({
       </Row>
 
       <Row>
-        <Col md={6} sm={6} className="p-2 align-self-center text-center">
+        <Col
+          md={6}
+          sm={6}
+          className="p-2 filterButton d-flex justify-content-center"
+        >
           <Button
             size="sm"
             className="float-sm-none float-right"
@@ -284,7 +298,11 @@ const FilterComponent = ({
             Apply
           </Button>
         </Col>
-        <Col md={6} sm={6} className="p-2 align-self-center text-center">
+        <Col
+          md={6}
+          sm={6}
+          className="p-2 filterButton d-flex justify-content-center"
+        >
           <Button
             size="sm"
             className="float-sm-none float-right"
