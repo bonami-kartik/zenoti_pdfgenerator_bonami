@@ -41,12 +41,15 @@ const List = () => {
   const [countryOption, setCountryOption] = useState([]);
   const [pageSize, setPageSize] = useState(10);
   const [areaFilterOption, setAreaFilterOption] = useState([]);
+  const [steps, setSteps] = useState(false);
   const [filter, setFilter] = useState({
     vertical: "",
     country: "",
     competitor: "",
     area: "",
     business_benefits: "",
+    pillar: "",
+    theme: "",
     uniqueZenoti: false,
   });
 
@@ -160,23 +163,23 @@ const List = () => {
       headerName: "Theme",
       field: "theme",
       flex: 2,
-      minWidth: 160,
+      minWidth: 120,
       tooltipField: "theme",
-      tooltipComponentParams: { width: 100 }
+      tooltipComponentParams: { width: 100 },
     },
     {
       headerName: "Pillar",
       field: "pillar",
       flex: 2,
-      minWidth: 160,
+      minWidth: 120,
       tooltipField: "pillar",
-      tooltipComponentParams: { width: 100 }
+      tooltipComponentParams: { width: 100 },
     },
     {
       headerName: "Feature",
       field: "title",
       flex: 2,
-      minWidth: 160,
+      minWidth: 120,
       tooltipField: "title",
       tooltipComponentParams: { width: 100 },
       headerComponentParams: HeaderCellRender({
@@ -192,7 +195,7 @@ const List = () => {
       headerName: "Description",
       field: "description",
       flex: 3,
-      minWidth: 150,
+      minWidth: 120,
       tooltipField: "description",
       tooltipComponentParams: { width: 700 },
       headerComponentParams: HeaderCellRender({
@@ -207,7 +210,7 @@ const List = () => {
       headerName: "Unique to Zenoti",
       field: "differentiator",
       flex: 1,
-      minWidth: 135,
+      minWidth: 100,
       headerComponentParams: HeaderCellRender({
         tooptip: "Sort on Yes to focus only on differentiators.",
       }),
@@ -263,7 +266,6 @@ const List = () => {
         caseSensitive: true,
       },
       cellRenderer: "highlightCellRenderer",
-
       hide: true,
     },
     {
@@ -278,7 +280,7 @@ const List = () => {
       headerName: "Notes",
       field: "note",
       flex: 1,
-      minWidth: 150,
+      minWidth: 180,
       sortable: false,
       resizable: false,
       headerComponentParams: HeaderCellRender({
@@ -302,7 +304,8 @@ const List = () => {
       headerName: data,
       flex: 1,
       field: data,
-      hide: !(filter.competitor.includes(data) && filter.competitor.length > 1),
+      minWidth: 100,
+      hide: !(filter.competitor.includes(data) && filter.competitor.length > 0),
     });
   });
 
@@ -367,6 +370,31 @@ const List = () => {
     });
     return DataList;
   };
+
+  const PillarAndTheme = ({pillar, theme}, DataList) => {
+    let pillarAndthemeList = [];
+    DataList.forEach((data) => {
+      if (data.pillar || data.theme) {
+        if (!pillar && theme) {
+          if (data.theme === theme) {
+            pillarAndthemeList.push(data);
+          }
+        } else if (pillar && !theme) {
+          if (data.pillar === pillar) {
+            pillarAndthemeList.push(data);
+          }
+        } else if (pillar && theme) {
+          if (data.pillar === pillar && data.theme === theme) {
+            pillarAndthemeList.push(data);
+          }
+        }
+      }
+    });
+
+    console.log(DataList);
+    return pillarAndthemeList;
+  };
+
   useEffect(() => {
     let areaList = new Set();
     let DataList = new Set();
@@ -409,14 +437,20 @@ const List = () => {
       }
     });
 
-    if (filter.competitor.length === 1) {
-      DataList = CompetitorFilter(filter.competitor[0], DataList);
-    } else if (filter.competitor.length > 1) {
+    if (filter.competitor.length > 0) {
+      //   DataList = CompetitorFilter(filter.competitor[0], DataList);
+      // } else if (filter.competitor.length > 1) {
+      // console.log(filter.competitor.length);
       DataList = MultipleCompetitorCompare(filter.competitor, DataList);
     }
 
     if (filter.business_benefits) {
       DataList = BusinessImpactFilter(filter.business_benefits, DataList);
+    }
+
+    if (filter.pillar || filter.theme) {
+      console.log(filter);
+      DataList = PillarAndTheme(filter, DataList);
     }
 
     if (filter.uniqueZenoti) {
@@ -438,6 +472,8 @@ const List = () => {
     filter.area,
     filter.uniqueZenoti,
     filter.business_benefits,
+    filter.pillar,
+    filter.theme,
   ]);
 
   const changePageSize = (size) => {
@@ -521,7 +557,6 @@ const List = () => {
   useEffect(() => {
     sendPublicIpToBackend();
   }, []);
-  const [steps, setSteps] = useState(false);
   const imageDropDown = () => {
     setSteps(!steps);
   };
@@ -541,7 +576,9 @@ const List = () => {
             style={{ height: "62px" }}
           >
             <div className="card-header d-flex justify-content-center align-items-center generate-pdf-card-header outerBorder text-center">
-              <h5 className="w-100">Steps to generate PDF</h5>
+              <h6 className="w-100 d-flex justify-content-center align-items-center text-center text_size">
+                Steps to generate PDF
+              </h6>
               {!steps ? (
                 <img
                   src="../assets/plus2.png"
