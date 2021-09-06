@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { ReactDOM } from "react";
-import { Row, Col, Form, FormGroup, FormLabel, Button } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  FormLabel,
+  Button,
+  Dropdown,
+} from "react-bootstrap";
 import Select from "react-select";
 
 const FilterComponent = ({
@@ -23,6 +31,8 @@ const FilterComponent = ({
 
   const [scrollOpen, setScrollOpen] = useState(false);
 
+  const [mobileView, setMobileView] = useState(false);
+
   const applyFilter = () => {
     handleFilterChange({
       vertical: verticalFilter,
@@ -33,6 +43,26 @@ const FilterComponent = ({
       uniqueZenoti,
     });
   };
+
+  window.addEventListener("resize", (e) => {
+    if (e.currentTarget.innerWidth < 770) {
+      setMobileView(true);
+      setScrollOpen(true);
+    } else {
+      setMobileView(false);
+      setScrollOpen(false);
+    }
+  });
+
+  useEffect(() => {
+    if (window.screen.availWidth < 770) {
+      setMobileView(true);
+      setScrollOpen(true);
+    } else {
+      setMobileView(false);
+      setScrollOpen(false);
+    }
+  }, []);
 
   useEffect(() => {
     handleFilterChange({
@@ -106,7 +136,7 @@ const FilterComponent = ({
 
   return (
     <div
-      className="formBorder section-padding filterHeight"
+      className="formBorder section-padding filterHeight formtableBorder"
       style={{ height: "65vh" }}
     >
       {/* <Col className="col-lg-80 align-self-center">
@@ -205,13 +235,13 @@ const FilterComponent = ({
                   key={data}
                   id={`Aval_Business_${index}`}
                   size="sm"
-                  onClick={() =>
-                    onChange(
-                      `Aval_Business_${index}`,
-                      data,
-                      setCompetitorFilter
-                    )
-                  }
+                  // onClick={() =>
+                  //   onChange(
+                  //     `Aval_Business_${index}`,
+                  //     data,
+                  //     setCompetitorFilter
+                  //   )
+                  // }
                 >
                   {data}
                 </span>
@@ -261,37 +291,79 @@ const FilterComponent = ({
                 </span>
               );
             })}
+
+            <hr />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <h6>
+              <b>Themes</b>
+            </h6>
+            <div style={{ width: "85%" }}>
+              <select
+                className="select_dropdown btn btn-sm w-100"
+                defaultValue="select theme"
+              >
+                <option value="0">hello</option>
+                <option value="0">hello1</option>
+                <option value="0">hello2</option>
+                <option value="0">hello3</option>
+                <option value="0">hello4</option>
+                <option value="0">hello5</option>
+                <option value="0">hello6</option>
+              </select>
+            </div>
+            {/* {BusinessBenefits.map((data, index) => {
+              return (
+                <span
+                  className="buttonClass btn btn-sm Business"
+                  key={data}
+                  id={`Business_${index}`}
+                  size="sm"
+                  onClick={() =>
+                    onChange(`Business_${index}`, data, setBusinessFilter)
+                  }
+                >
+                  {data}
+                </span>
+              );
+            })} */}
           </Col>
         </Row>
       </div>
-      <Row>
-        <Col md={12}>
-          <a
-            className="view_all_filter"
-            onClick={() => setScrollOpen(!scrollOpen)}
-          >
-            <b>View All ...</b>
-          </a>
-          <h6 className="mb-3">
+      {!mobileView && (
+        <Row>
+          <Col md={12}>
+            {!scrollOpen && (
+              <a
+                className="view_all_filter"
+                onClick={() => setScrollOpen(!scrollOpen)}
+              >
+                <b>View All ...</b>
+              </a>
+            )}
+            <h6 className="mb-3">
+              <hr />
+              <b>Unique to Zenoti</b>
+            </h6>
+            <div className="d-flex justify-content-center">
+              <input
+                type="checkbox"
+                id="switch"
+                className="switch"
+                onChange={() => {
+                  setUniqueZenoti(!uniqueZenoti);
+                }}
+              />
+              <label className="round" htmlFor="switch">
+                Toggle
+              </label>
+            </div>
             <hr />
-            <b>Unique to Zenoti</b>
-          </h6>
-          <div className="d-flex justify-content-center">
-            <input
-              type="checkbox"
-              id="switch"
-              className="switch"
-              onChange={() => {
-                setUniqueZenoti(!uniqueZenoti);
-              }}
-            />
-            <label className="round" htmlFor="switch">
-              Toggle
-            </label>
-          </div>
-          <hr />
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
 
       <Row>
         <Col

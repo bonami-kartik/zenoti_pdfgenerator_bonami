@@ -97,39 +97,39 @@ const List = () => {
     setFecthing(false);
   }, []);
 
-  // useEffect(() => {
-  //   let searchData = [];
-  //   if (searchValue) {
-  //     let searchValueText = searchValue;
-  //     searchValueText = searchValueText.replace(
-  //       /[-[\]{}()*+?.,\\^$|#\s]/g,
-  //       "\\$&"
-  //     );
-  //     const regex = new RegExp(`${searchValueText}`, "ig");
-  //     context.searchString = searchValueText;
-  //     defaultData.forEach((data) => {
-  //       const searchObj = {
-  //         title: data.title,
-  //         area: data.area,
-  //         business_benefits: data.business_benefits,
-  //         country: data.country,
-  //         description: data.description,
-  //         differentiator: data.differentiator ? "Yes" : "No",
-  //         vertical: data.vertical.join(),
-  //         note: data.note || "",
-  //       };
-  //       if (Object.values(searchObj).join().match(regex)) {
-  //         searchData.push(data);
-  //       }
-  //     });
-  //   } else {
-  //     searchData = [...defaultData];
-  //   }
-  //   setTableData(searchData);
-  //   setTimeout(() => {
-  //     if (grid) grid.api.refreshCells({ columns: ["note"], force: true });
-  //   }, 1000);
-  // }, [searchValue, defaultData]);
+  useEffect(() => {
+    let searchData = [];
+    if (searchValue) {
+      let searchValueText = searchValue;
+      searchValueText = searchValueText.replace(
+        /[-[\]{}()*+?.,\\^$|#\s]/g,
+        "\\$&"
+      );
+      const regex = new RegExp(`${searchValueText}`, "ig");
+      context.searchString = searchValueText;
+      defaultData.forEach((data) => {
+        const searchObj = {
+          title: data.title,
+          area: data.area,
+          business_benefits: data.business_benefits,
+          country: data.country,
+          description: data.description,
+          differentiator: data.differentiator ? "Yes" : "No",
+          vertical: data.vertical.join(),
+          note: data.note || "",
+        };
+        if (Object.values(searchObj).join().match(regex)) {
+          searchData.push(data);
+        }
+      });
+    } else {
+      searchData = [...defaultData];
+    }
+    setTableData(searchData);
+    setTimeout(() => {
+      if (grid) grid.api.refreshCells({ columns: ["note"], force: true });
+    }, 1000);
+  }, [searchValue, defaultData]);
 
   const onGridReady = (grid) => {
     setGrid(grid);
@@ -156,6 +156,22 @@ const List = () => {
   }, [filter.vertical, filter.country]);
 
   const columnDefs = [
+    {
+      headerName: "Theme",
+      field: "theme",
+      flex: 2,
+      minWidth: 160,
+      tooltipField: "theme",
+      tooltipComponentParams: { width: 100 }
+    },
+    {
+      headerName: "Pillar",
+      field: "pillar",
+      flex: 2,
+      minWidth: 160,
+      tooltipField: "pillar",
+      tooltipComponentParams: { width: 100 }
+    },
     {
       headerName: "Feature",
       field: "title",
@@ -513,10 +529,19 @@ const List = () => {
   return (
     <>
       <Row className="my-3 align-items-center">
-        <Col xl={6} lg={9} md={12} sm={12}>
-          <div className="card mb-5">
-            <h5 className="card-header generate-pdf-card-header text-center">
-              Steps to generate PDF
+        <Col
+          xl={6}
+          lg={6}
+          md={12}
+          sm={12}
+          className="d-flex justify-content-center"
+        >
+          <div
+            className="card mb-1 steps_Search outerBorder w-100"
+            style={{ height: "62px" }}
+          >
+            <div className="card-header d-flex justify-content-center align-items-center generate-pdf-card-header outerBorder text-center">
+              <h5 className="w-100">Steps to generate PDF</h5>
               {!steps ? (
                 <img
                   src="../assets/plus2.png"
@@ -530,9 +555,35 @@ const List = () => {
                   onClick={imageDropDown}
                 />
               )}
-            </h5>
-            {steps && (
-              <div className="card-body generate-pdf-card-body">
+            </div>
+          </div>
+        </Col>
+        <Col
+          xl={6}
+          lg={6}
+          md={12}
+          sm={12}
+          className="d-flex justify-content-center"
+        >
+          <SearchComponent
+            searchValue={searchValue}
+            onSearchChange={(value) => {
+              setSearchValue(value);
+            }}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col
+          xl={6}
+          lg={6}
+          md={12}
+          sm={12}
+          className="d-flex justify-content-center"
+        >
+          {steps && (
+            <div className="steps_Search d-flex justify-content-center">
+              <div className="card-body generate-pdf-card-body formtableBorder mb-5">
                 <ol>
                   <li>Select vertical from dropdown filter.</li>
                   <li>Select region from dropdown filter.</li>
@@ -544,8 +595,8 @@ const List = () => {
                   region at one time.
                 </p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </Col>
       </Row>
       <Row>

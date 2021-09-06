@@ -1,221 +1,221 @@
 [
-    {
-        "business_benefits": "Streamline operations, unify the business",
-        "area": "",
-        "differentiator": true,
-        "updatedAt": 1629283395553,
-        "vertical": [
-            "",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1624390968.1027887",
-        "description": "Uses this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
-        "id": "05ce5bc5-d392-11eb-be52-09bf441b60dd",
-        "product_feature": null,
-        "country": "Europe",
-        "title": "Benchmarking Analytics",
-        "competitor": {"Booker": "Y","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
-    },
-    {
-        "business_benefits": "Streamline operations, unify the business",
-        "area": "R&A",
-        "differentiator": true,
-        "updatedAt": 1625763673960,
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1624390968.1093297",
-        "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
-        "id": "05cf5b29-d392-11eb-8d12-09bf441b60dd",
-        "product_feature": null,
-        "country": "Europe",
-        "title": "Benchmarking Analytics",
-        "competitor": {"Booker": "Y","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
-    },
-    {
-        "business_benefits": "Streamline operations, unify the business",
-        "area": "R&A",
-        "differentiator": true,
-        "updatedAt": 1625763651116,
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1624390968.1241727",
-        "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
-        "id": "05d19f08-d392-11eb-a8a7-09bf441b60dd",
-        "product_feature": null,
-        "country": "SEA",
-        "title": "Benchmarking Analytics",
-        "competitor": {"Booker": "Y","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
-    },
-    {
-        "business_benefits": "Streamline operations, unify the business",
-        "area": "",
-        "differentiator": true,
-        "updatedAt": 1625763598150,
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1624390968.1442242",
-        "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
-        "id": "05d4ae4a-d392-11eb-bf39-09bf441b60dd",
-        "product_feature": null,
-        "country": "Canada",
-        "title": "Benchmarking Analytics",
-        "competitor": {"Booker": "N","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
-    },
-    {
-        "business_benefits": "unify the business",
-        "area": "R&A",
-        "differentiator": true,
-        "updatedAt": 1625763585287,
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1624390968.1640465",
-        "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
-        "id": "05d7b494-d392-11eb-b5d7-09bf441b60dd",
-        "product_feature": null,
-        "country": "Middle East",
-        "title": "Benchmarking Analytics",
-        "competitor": {"Booker": "N","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
-    },
-    {
-        "business_benefits": "Streamline operations, unify the business",
-        "area": "R&A",
-        "differentiator": true,
-        "updatedAt": 1625763571253,
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1624390968.184079",
-        "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
-        "id": "05dac311-d392-11eb-9557-09bf441b60dd",
-        "product_feature": null,
-        "country": "India",
-        "title": "Benchmarking Analytics"
-    },
-    {
-        "business_benefits": "Streamline operations, unify the business",
-        "area": "R&A",
-        "differentiator": true,
-        "updatedAt": 1625763554547,
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1624390968.2040904",
-        "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
-        "id": "05ddd0d0-d392-11eb-ac7a-09bf441b60dd",
-        "product_feature": null,
-        "country": "UK",
-        "title": "Benchmarking Analytics",
-        "competitor": {"Booker": "Y","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
-    },
-    {
-        "business_benefits": "Streamline operations, unify the business",
-        "area": "R&A",
-        "updatedAt": "1624390967.8487973",
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1624390967.8487973",
-        "product_feature": null,
-        "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
-        "id": "05b6547e-d392-11eb-a3fa-09bf441b60dd",
-        "country": "US",
-        "title": "Benchmarking Analytics",
-        "competitor": {"Booker": "Y","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
-    },
-    {
-        "business_benefits": "Streamline operations, unify the business",
-        "area": "Memberships - Unify Operations",
-        "differentiator": true,
-        "updatedAt": "1617176331.173753",
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1617176331.173752",
-        "description": "You can tailor promotions to apply to regions or even specific locations. This means you can help a new franchisee launch a new location with great specials.",
-        "id": "2317ba5f-91f4-11eb-9ff6-31a4012fb815",
-        "country": "US",
-        "title": "Regional or location-level membership promotions",
-        "competitor": {"Booker": "Y","MBO": "Y","Salonbiz": "Y","Phorest": "Y","Boulevard": "N"}
-    },
-    {
-        "business_benefits": "Streamline operations, unify the business",
-        "area": "Memberships - Unify Operations",
-        "differentiator": true,
-        "updatedAt": "1617176331.1737406",
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1617176331.1737394",
-        "description": "If you want incremental revenue recognition that occurs when the guest uses the service, Zenoti can make this happen regardless of which location is providing the service. ",
-        "id": "2317b9e2-91f4-11eb-9fda-31a4012fb815",
-        "country": "US",
-        "title": "Flexible membership revenue recognition"
-    },
-    {
-        "business_benefits": "Elevate the guest experience, unify the business",
-        "area": "Memberships - Unify Operations",
-        "differentiator": true,
-        "updatedAt": "1617176331.1737282",
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1617176331.1737275",
-        "description": "Members can redeem benefits across your network. So wherever they are, they know their benefits are waiting for them.",
-        "id": "2317b968-91f4-11eb-922d-31a4012fb815",
-        "country": "US",
-        "title": "Cross-location membership redemptions"
-    },
-    {
-        "business_benefits": "Unify the business",
-        "area": "Memberships - Unify Operations",
-        "differentiator": true,
-        "updatedAt": "1617176331.173716",
-        "vertical": [
-            "Salon",
-            "Spa",
-            "Medspa",
-            "Fitness"
-        ],
-        "createdAt": "1617176331.1737149",
-        "description": "Got a pricing change you need to implement overnight? No worries. With central membership management, applying a change once releases it across your network. ",
-        "id": "2317b8eb-91f4-11eb-949b-31a4012fb815",
-        "country": "US",
-        "title": "Unified membership pricing"
+  {
+    "business_benefits": "Streamline operations, unify the business",
+    "area": "",
+    "differentiator": true,
+    "updatedAt": 1629283395553,
+    "vertical": ["", "Spa", "Medspa", "Fitness"],
+    "pillar": "test pillar data",
+    "theme": "theme test data",
+    "createdAt": "1624390968.1027887",
+    "description": "Uses this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
+    "id": "05ce5bc5-d392-11eb-be52-09bf441b60dd",
+    "product_feature": null,
+    "country": "Europe",
+    "title": "Benchmarking Analytics",
+    "competitor": {
+      "Booker": "Y",
+      "MBO": "Y",
+      "Salonbiz": "Y",
+      "Phorest": "Y",
+      "Boulevard": "N"
     }
+  },
+  {
+    "business_benefits": "Streamline operations, unify the business",
+    "area": "R&A",
+    "differentiator": true,
+    "updatedAt": 1625763673960,
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "pillar": "test pillar data",
+    "theme": "theme test data",
+    "createdAt": "1624390968.1093297",
+    "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
+    "id": "05cf5b29-d392-11eb-8d12-09bf441b60dd",
+    "product_feature": null,
+    "country": "Europe",
+    "title": "Benchmarking Analytics",
+    "competitor": {
+      "Booker": "Y",
+      "MBO": "Y",
+      "Salonbiz": "Y",
+      "Phorest": "Y",
+      "Boulevard": "N"
+    }
+  },
+  {
+    "business_benefits": "Streamline operations, unify the business",
+    "area": "R&A",
+    "differentiator": true,
+    "updatedAt": 1625763651116,
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "pillar": "test pillar data",
+    "theme": "theme test data",
+    "createdAt": "1624390968.1241727",
+    "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
+    "id": "05d19f08-d392-11eb-a8a7-09bf441b60dd",
+    "product_feature": null,
+    "country": "SEA",
+    "title": "Benchmarking Analytics",
+    "competitor": {
+      "Booker": "Y",
+      "MBO": "Y",
+      "Salonbiz": "Y",
+      "Phorest": "Y",
+      "Boulevard": "N"
+    }
+  },
+  {
+    "business_benefits": "Streamline operations, unify the business",
+    "area": "",
+    "differentiator": true,
+    "updatedAt": 1625763598150,
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "pillar": "test pillar data",
+    "theme": "theme test data",
+    "createdAt": "1624390968.1442242",
+    "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
+    "id": "05d4ae4a-d392-11eb-bf39-09bf441b60dd",
+    "product_feature": null,
+    "country": "Canada",
+    "title": "Benchmarking Analytics",
+    "competitor": {
+      "Booker": "N",
+      "MBO": "Y",
+      "Salonbiz": "Y",
+      "Phorest": "Y",
+      "Boulevard": "N"
+    }
+  },
+  {
+    "business_benefits": "unify the business",
+    "area": "R&A",
+    "differentiator": true,
+    "updatedAt": 1625763585287,
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "pillar": "test pillar data",
+    "theme": "theme test data",
+    "createdAt": "1624390968.1640465",
+    "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
+    "id": "05d7b494-d392-11eb-b5d7-09bf441b60dd",
+    "product_feature": null,
+    "country": "Middle East",
+    "title": "Benchmarking Analytics",
+    "competitor": {
+      "Booker": "N",
+      "MBO": "Y",
+      "Salonbiz": "Y",
+      "Phorest": "Y",
+      "Boulevard": "N"
+    }
+  },
+  {
+    "business_benefits": "Streamline operations, unify the business",
+    "area": "R&A",
+    "differentiator": true,
+    "updatedAt": 1625763571253,
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "pillar": "test pillar data",
+    "theme": "theme test data",
+    "createdAt": "1624390968.184079",
+    "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
+    "id": "05dac311-d392-11eb-9557-09bf441b60dd",
+    "product_feature": null,
+    "country": "India",
+    "title": "Benchmarking Analytics"
+  },
+  {
+    "business_benefits": "Streamline operations, unify the business",
+    "area": "R&A",
+    "differentiator": true,
+    "updatedAt": 1625763554547,
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "createdAt": "1624390968.2040904",
+    "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
+    "id": "05ddd0d0-d392-11eb-ac7a-09bf441b60dd",
+    "product_feature": null,
+    "country": "UK",
+    "title": "Benchmarking Analytics",
+    "competitor": {
+      "Booker": "Y",
+      "MBO": "Y",
+      "Salonbiz": "Y",
+      "Phorest": "Y",
+      "Boulevard": "N"
+    }
+  },
+  {
+    "business_benefits": "Streamline operations, unify the business",
+    "area": "R&A",
+    "updatedAt": "1624390967.8487973",
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "createdAt": "1624390967.8487973",
+    "product_feature": null,
+    "description": "Use this analytics platform to make strategic decisions based on solid industry data across 12,000 businesses. Base decisions on how you’re performing against similar businesses across the globe, within your region, or even in your state. Pinpoint where to open your next franchise or what services to offer.",
+    "id": "05b6547e-d392-11eb-a3fa-09bf441b60dd",
+    "country": "US",
+    "title": "Benchmarking Analytics",
+    "competitor": {
+      "Booker": "Y",
+      "MBO": "Y",
+      "Salonbiz": "Y",
+      "Phorest": "Y",
+      "Boulevard": "N"
+    }
+  },
+  {
+    "business_benefits": "Streamline operations, unify the business",
+    "area": "Memberships - Unify Operations",
+    "differentiator": true,
+    "updatedAt": "1617176331.173753",
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "createdAt": "1617176331.173752",
+    "description": "You can tailor promotions to apply to regions or even specific locations. This means you can help a new franchisee launch a new location with great specials.",
+    "id": "2317ba5f-91f4-11eb-9ff6-31a4012fb815",
+    "country": "US",
+    "title": "Regional or location-level membership promotions",
+    "competitor": {
+      "Booker": "Y",
+      "MBO": "Y",
+      "Salonbiz": "Y",
+      "Phorest": "Y",
+      "Boulevard": "N"
+    }
+  },
+  {
+    "business_benefits": "Streamline operations, unify the business",
+    "area": "Memberships - Unify Operations",
+    "differentiator": true,
+    "updatedAt": "1617176331.1737406",
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "createdAt": "1617176331.1737394",
+    "description": "If you want incremental revenue recognition that occurs when the guest uses the service, Zenoti can make this happen regardless of which location is providing the service. ",
+    "id": "2317b9e2-91f4-11eb-9fda-31a4012fb815",
+    "country": "US",
+    "title": "Flexible membership revenue recognition"
+  },
+  {
+    "business_benefits": "Elevate the guest experience, unify the business",
+    "area": "Memberships - Unify Operations",
+    "differentiator": true,
+    "updatedAt": "1617176331.1737282",
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "createdAt": "1617176331.1737275",
+    "description": "Members can redeem benefits across your network. So wherever they are, they know their benefits are waiting for them.",
+    "id": "2317b968-91f4-11eb-922d-31a4012fb815",
+    "country": "US",
+    "title": "Cross-location membership redemptions"
+  },
+  {
+    "business_benefits": "Unify the business",
+    "area": "Memberships - Unify Operations",
+    "differentiator": true,
+    "updatedAt": "1617176331.173716",
+    "vertical": ["Salon", "Spa", "Medspa", "Fitness"],
+    "createdAt": "1617176331.1737149",
+    "description": "Got a pricing change you need to implement overnight? No worries. With central membership management, applying a change once releases it across your network. ",
+    "id": "2317b8eb-91f4-11eb-949b-31a4012fb815",
+    "country": "US",
+    "title": "Unified membership pricing"
+  }
 ]
