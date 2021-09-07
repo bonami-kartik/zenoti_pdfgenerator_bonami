@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button, Row, Col, Form } from "react-bootstrap";
 import { Table } from "../common";
 import { getAdminList, getVerticalList, logVisitorEvent } from "../api/api";
-import FilterComponent from "./filterComponent";
 import NoteModal from "./noteModal";
 import PdfModal from "./pdfModal";
 import NoteRenderer from "./NoteRenderer";
@@ -14,6 +13,7 @@ import AreaFilter from "./AreaFilter";
 import { listFilterIcon } from "../utils/helper";
 import publicIp from "public-ip";
 import Data from "./data.json";
+import UserFilterComponent from "./userfilterComponent";
 
 const pageSizes = [10, 20, 30, 40, 50, 100, 500];
 
@@ -45,7 +45,7 @@ const List = () => {
   const [filter, setFilter] = useState({
     vertical: "",
     country: "",
-    competitor: "",
+    competitor: [],
     area: "",
     business_benefits: "",
     pillar: "",
@@ -67,37 +67,160 @@ const List = () => {
 
   const getTableData = useCallback(() => {
     setFecthing(true);
-    // getAdminList().then((res) => {
-    //   let countryList = [];
-    //   let areaList = [];
-    //   res.forEach((d) => {
-    //     if (d.country && !countryList.includes(d.country)) {
-    //       countryList.push(d.country);
-    //     }
-    //     if (d.area && !areaList.includes(d.area)) {
-    //       areaList.push(d.area);
-    //     }
-    //     setAreaFilterOption(areaList);
-    //   });
-    //   setCountryOption(countryList);
-    //   setDefaultData(res);
-    //   setFecthing(false);
-    // });
+    getAdminList().then((res) => {
+      let countryList = [];
+      let areaList = [];
+      res.forEach((d, index) => {
+        if (d.country && !countryList.includes(d.country)) {
+          countryList.push(d.country);
+        }
+        if (d.area && !areaList.includes(d.area)) {
+          areaList.push(d.area);
+        }
+        setAreaFilterOption(areaList);
 
-    let countryList = [];
-    let areaList = [];
-    Data.forEach((d) => {
-      if (d.country && !countryList.includes(d.country)) {
-        countryList.push(d.country);
-      }
-      if (d.area && !areaList.includes(d.area)) {
-        areaList.push(d.area);
-      }
-      setAreaFilterOption(areaList);
+        if (index > 100) {
+          d.pillar = "pillar1";
+          d.theme = "theme6";
+          d.competitor = {
+            Booker: "N",
+            MBO: "N",
+            Salonbiz: "N",
+            Phorest: "N",
+            Boulevard: "N",
+          };
+        } else if (100 < index > 200) {
+          d.pillar = "pillar2";
+          d.theme = "theme5";
+          d.competitor = {
+            Booker: "Y",
+            MBO: "Y",
+            Salonbiz: "Y",
+            Phorest: "Y",
+            Boulevard: "Y",
+          };
+        } else if (200 < index > 300) {
+          d.pillar = "pillar3";
+          d.theme = "theme4";
+          d.competitor = {
+            Booker: "Y",
+            MBO: "Y",
+            Salonbiz: "Y",
+            Phorest: "Y",
+            Boulevard: "Y",
+          };
+        } else if (300 < index > 400) {
+          d.pillar = "pillar4";
+          d.theme = "theme3";
+          d.competitor = {
+            Booker: "Y",
+            MBO: "Y",
+            Salonbiz: "Y",
+            Phorest: "Y",
+            Boulevard: "Y",
+          };
+        } else if (400 < index > 500) {
+          d.pillar = "pillar5";
+          d.theme = "theme2";
+          d.competitor = {
+            Booker: "Y",
+            MBO: "Y",
+            Salonbiz: "Y",
+            Phorest: "Y",
+            Boulevard: "Y",
+          };
+        } else {
+          d.pillar = "pillar6";
+          d.theme = "theme1";
+          d.competitor = {
+            Booker: "Y",
+            MBO: "Y",
+            Salonbiz: "Y",
+            Phorest: "Y",
+            Boulevard: "Y",
+          };
+        }
+      });
+      setCountryOption(countryList);
+      setDefaultData(res);
+      setFecthing(false);
     });
-    setCountryOption(countryList);
-    setDefaultData(Data);
-    setFecthing(false);
+
+    // let countryList = [];
+    // let areaList = [];
+    // Data.forEach((d, index) => {
+    //   if (d.country && !countryList.includes(d.country)) {
+    //     countryList.push(d.country);
+    //   }
+    //   if (d.area && !areaList.includes(d.area)) {
+    //     areaList.push(d.area);
+    //   }
+    //   setAreaFilterOption(areaList);
+    //   if (index < 10) {
+    //     d.pillar = "pillar1";
+    //     d.theme = "theme6";
+    //     d.competitor = {
+    //       Booker: "Y",
+    //       MBO: "N",
+    //       Salonbiz: "Y",
+    //       Phorest: "Y",
+    //       Boulevard: "Y",
+    //     };
+    //   } else if (index < 20) {
+    //     d.pillar = "pillar2";
+    //     d.theme = "theme5";
+    //     d.competitor = {
+    //       Booker: "N",
+    //       MBO: "N",
+    //       Salonbiz: "Y",
+    //       Phorest: "Y",
+    //       Boulevard: "Y",
+    //     };
+    //   } else if (index < 30) {
+    //     d.pillar = "pillar3";
+    //     d.theme = "theme4";
+    //     d.competitor = {
+    //       Booker: "Y",
+    //       MBO: "Y",
+    //       Salonbiz: "Y",
+    //       Phorest: "Y",
+    //       Boulevard: "Y",
+    //     };
+    //   } else if (index < 40) {
+    //     d.pillar = "pillar4";
+    //     d.theme = "theme3";
+    //     d.competitor = {
+    //       Booker: "Y",
+    //       MBO: "Y",
+    //       Salonbiz: "Y",
+    //       Phorest: "Y",
+    //       Boulevard: "Y",
+    //     };
+    //   } else if (index < 50) {
+    //     d.pillar = "pillar5";
+    //     d.theme = "theme2";
+    //     d.competitor = {
+    //       Booker: "Y",
+    //       MBO: "Y",
+    //       Salonbiz: "Y",
+    //       Phorest: "Y",
+    //       Boulevard: "Y",
+    //     };
+    //   } else {
+    //     d.pillar = "pillar6";
+    //     d.theme = "theme1";
+    //     d.competitor = {
+    //       Booker: "Y",
+    //       MBO: "Y",
+    //       Salonbiz: "Y",
+    //       Phorest: "Y",
+    //       Boulevard: "Y",
+    //     };
+    //   }
+    // });
+    // setCountryOption(countryList);
+    // setDefaultData(Data);
+    // setFecthing(false);
   }, []);
 
   useEffect(() => {
@@ -132,7 +255,7 @@ const List = () => {
     setTimeout(() => {
       if (grid) grid.api.refreshCells({ columns: ["note"], force: true });
     }, 1000);
-  }, [searchValue, defaultData]);
+  }, [searchValue]);
 
   const onGridReady = (grid) => {
     setGrid(grid);
@@ -329,49 +452,46 @@ const List = () => {
     return searchData;
   };
 
-  const ToggleFilter = (value, DataList) => {
-    let uniqueValue = [];
-    DataList.forEach((data) => {
-      if (value === data.differentiator) {
-        uniqueValue.push(data);
-      }
-    });
+  const MultipleCompetitorCompare = (value, DataList) => {
+    let filterData = new Set();
+    DataList.forEach((data, index) => {
+      if (value.competitor.length > 0 && !value.uniqueZenoti) {
+        value.competitor.forEach((val, index) => {
+          if (data.competitor[val] === "N" || data.competitor[val] === "NIA") {
+            data[val] = "✗";
+          } else {
+            data[val] = "✔";
+          }
+        });
 
-    return uniqueValue;
-  };
-
-  const CompetitorFilter = (value, DataList) => {
-    let competitorValue = [];
-
-    DataList.forEach((data) => {
-      if (data.competitor) {
-        if (
-          data.competitor[value] === "N" ||
-          data.competitor[value] === "NIA"
-        ) {
-          competitorValue.push(data);
+        filterData.add(data);
+      } else if (value.competitor.length > 0 && value.uniqueZenoti) {
+        const checkingvalue = value.competitor.map((val) => {
+          if (
+            data.differentiator === true &&
+            (data.competitor[val] === "N" || data.competitor[val] === "NIA")
+          ) {
+            data[val] = "✗";
+            return true;
+          } else {
+            data[val] = "✔";
+            return false;
+          }
+        });
+        if (!checkingvalue.includes(false)) {
+          filterData.add(data);
+        }
+      } else if (value.competitor.length === 0 && value.uniqueZenoti) {
+        if (data.differentiator === true) {
+          filterData.add(data);
         }
       }
     });
-    return competitorValue;
+
+    return filterData;
   };
 
-  const MultipleCompetitorCompare = (value, DataList) => {
-    DataList.forEach((data) => {
-      if (data.competitor) {
-        value.forEach((val) => {
-          if (data.competitor[val] === "N" || data.competitor[val] === "NIA") {
-            data[val] = "✔";
-          } else {
-            data[val] = "✗";
-          }
-        });
-      }
-    });
-    return DataList;
-  };
-
-  const PillarAndTheme = ({pillar, theme}, DataList) => {
+  const PillarAndTheme = ({ pillar, theme }, DataList) => {
     let pillarAndthemeList = [];
     DataList.forEach((data) => {
       if (data.pillar || data.theme) {
@@ -390,8 +510,6 @@ const List = () => {
         }
       }
     });
-
-    console.log(DataList);
     return pillarAndthemeList;
   };
 
@@ -425,9 +543,6 @@ const List = () => {
         }
       }
 
-      // uniqueZenoti Filter
-
-      // Area, Business Impact, Competitor Filters
       if (filter.area) {
         if (filter.area.toLowerCase() === d.area.toLowerCase()) {
           DataList.add(d);
@@ -436,12 +551,8 @@ const List = () => {
         DataList.add(d);
       }
     });
-
-    if (filter.competitor.length > 0) {
-      //   DataList = CompetitorFilter(filter.competitor[0], DataList);
-      // } else if (filter.competitor.length > 1) {
-      // console.log(filter.competitor.length);
-      DataList = MultipleCompetitorCompare(filter.competitor, DataList);
+    if (filter.competitor.length > 0 || filter.uniqueZenoti) {
+      DataList = MultipleCompetitorCompare(filter, DataList);
     }
 
     if (filter.business_benefits) {
@@ -449,12 +560,7 @@ const List = () => {
     }
 
     if (filter.pillar || filter.theme) {
-      console.log(filter);
       DataList = PillarAndTheme(filter, DataList);
-    }
-
-    if (filter.uniqueZenoti) {
-      DataList = ToggleFilter(filter.uniqueZenoti, DataList);
     }
 
     setTableData(Array.from(DataList));
@@ -468,7 +574,7 @@ const List = () => {
     defaultData,
     filter.vertical,
     filter.country,
-    filter.competitor,
+    filter.competitor.length,
     filter.area,
     filter.uniqueZenoti,
     filter.business_benefits,
@@ -575,8 +681,11 @@ const List = () => {
             className="card mb-1 steps_Search outerBorder w-100"
             style={{ height: "62px" }}
           >
-            <div className="card-header d-flex justify-content-center align-items-center generate-pdf-card-header outerBorder text-center">
-              <h6 className="w-100 d-flex justify-content-center align-items-center text-center text_size">
+            <div
+              className="card-header d-flex justify-content-center align-items-center generate-pdf-card-header outerBorder text-center"
+              style={{ height: "62px" }}
+            >
+              <h6 className="w-100 d-flex mb-0 justify-content-center align-items-center text-center text_size">
                 Steps to generate PDF
               </h6>
               {!steps ? (
@@ -638,7 +747,7 @@ const List = () => {
       </Row>
       <Row>
         <Col sm={12} lg={3} md={12}>
-          <FilterComponent
+          <UserFilterComponent
             filter={filter}
             handleFilterChange={(data) => {
               setFilter(data);
