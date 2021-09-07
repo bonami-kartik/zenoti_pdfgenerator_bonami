@@ -6,6 +6,7 @@ const UserFilterComponent = ({
   handleFilterChange,
   verticalOption,
   countryOption,
+  Filtertheme,
 }) => {
   const [verticalFilter, setVerticalFilter] = useState("");
   const [regionFilter, setRegionFilter] = useState("");
@@ -20,7 +21,6 @@ const UserFilterComponent = ({
   const [steps, setSteps] = useState(false);
 
   const applyFilter = () => {
-    console.log(themeFilter);
     handleFilterChange({
       vertical: verticalFilter,
       country: regionFilter,
@@ -96,10 +96,10 @@ const UserFilterComponent = ({
     handleFilterChange(filterObj);
   };
 
+  //testing data filters api alternative
   const Competitor = ["Booker", "MBO", "Salonbiz", "Phorest", "Boulevard"];
   const Area = ["R&A", "Packages", "Payments", "Reports & Analytics"];
   const BusinessBenefits = ["Streamline operations", "unify the business"];
-  const Themes = ["theme1", "theme2", "theme3", "theme4", "theme5"];
   const Pillars = ["pillar1", "pillar2", "pillar3", "pillar4", "pillar5"];
 
   const onChange = (index, value, Filter) => {
@@ -401,7 +401,7 @@ const UserFilterComponent = ({
                     style={{ width: "70%" }}
                   >
                     <option value="">Select Theme</option>
-                    {Themes.map((data, index) => {
+                    {Filtertheme.map((data, index) => {
                       return (
                         <option key={index} value={data}>
                           {data}

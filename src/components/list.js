@@ -12,7 +12,7 @@ import { SearchContext } from "./searchContext";
 import AreaFilter from "./AreaFilter";
 import { listFilterIcon } from "../utils/helper";
 import publicIp from "public-ip";
-import Data from "./data.json";
+// import Data from "./data.json";
 import UserFilterComponent from "./userfilterComponent";
 
 const pageSizes = [10, 20, 30, 40, 50, 100, 500];
@@ -42,6 +42,7 @@ const List = () => {
   const [pageSize, setPageSize] = useState(10);
   const [areaFilterOption, setAreaFilterOption] = useState([]);
   const [steps, setSteps] = useState(false);
+  const [theme, setTheme] = useState([]);
   const [filter, setFilter] = useState({
     vertical: "",
     country: "",
@@ -79,7 +80,7 @@ const List = () => {
         }
         setAreaFilterOption(areaList);
 
-        if (index > 100) {
+        if (index < 100) {
           d.pillar = "pillar1";
           d.theme = "theme6";
           d.competitor = {
@@ -89,7 +90,7 @@ const List = () => {
             Phorest: "N",
             Boulevard: "N",
           };
-        } else if (100 < index > 200) {
+        } else if (index < 200) {
           d.pillar = "pillar2";
           d.theme = "theme5";
           d.competitor = {
@@ -99,7 +100,7 @@ const List = () => {
             Phorest: "Y",
             Boulevard: "Y",
           };
-        } else if (200 < index > 300) {
+        } else if (index < 300) {
           d.pillar = "pillar3";
           d.theme = "theme4";
           d.competitor = {
@@ -109,7 +110,7 @@ const List = () => {
             Phorest: "Y",
             Boulevard: "Y",
           };
-        } else if (300 < index > 400) {
+        } else if (index < 400) {
           d.pillar = "pillar4";
           d.theme = "theme3";
           d.competitor = {
@@ -119,7 +120,7 @@ const List = () => {
             Phorest: "Y",
             Boulevard: "Y",
           };
-        } else if (400 < index > 500) {
+        } else if (index < 500) {
           d.pillar = "pillar5";
           d.theme = "theme2";
           d.competitor = {
@@ -667,6 +668,20 @@ const List = () => {
     setSteps(!steps);
   };
 
+  const handleFilterValue = (data) => {
+    setFilter(data);
+  };
+
+  useEffect(() => {
+    if (tableData) {
+      let uniqueTheme = new Set();
+      tableData.forEach((data) => {
+        uniqueTheme.add(data.theme);
+      });
+      setTheme(Array.from(uniqueTheme));
+    }
+  }, [tableData]);
+
   return (
     <>
       <Row className="my-3 align-items-center">
@@ -747,14 +762,13 @@ const List = () => {
       </Row>
       <Row>
         <Col sm={12} lg={3} md={12}>
-          <UserFilterComponent
-            filter={filter}
-            handleFilterChange={(data) => {
-              setFilter(data);
-            }}
-            countryOption={countryOption}
-            verticalOption={verticalOption}
-          />
+            <UserFilterComponent
+              filter={filter}
+              handleFilterChange={handleFilterValue}
+              countryOption={countryOption}
+              verticalOption={verticalOption}
+              Filtertheme={theme}
+            />
         </Col>
         <Col sm={12} lg={9} md={12}>
           <SearchContext.Provider value={{ searchString: searchValue }}>
