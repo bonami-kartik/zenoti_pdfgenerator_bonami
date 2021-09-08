@@ -1,7 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Row, Col, Form } from "react-bootstrap";
 import { Table } from "../common";
-import { getAdminList, getVerticalList, logVisitorEvent } from "../api/api";
+import {
+  getAdminList,
+  getBusinessAreaList,
+  getCompetitorList,
+  getPillarList,
+  getVerticalList,
+  logVisitorEvent,
+} from "../api/api";
 import NoteModal from "./noteModal";
 import PdfModal from "./pdfModal";
 import NoteRenderer from "./NoteRenderer";
@@ -20,11 +27,26 @@ const pageSizes = [10, 20, 30, 40, 50, 100, 500];
 const List = () => {
   const context = React.useContext(SearchContext);
   const [verticalOption, setVerticalOptions] = useState([]);
+  const [competitorOption, setCompetitorOptions] = useState([]);
+  const [pillarOption, setPillarOptions] = useState([]);
+  const [businessAreaOption, setBusinessAreaOptions] = useState([]);
 
   useEffect(() => {
     getVerticalList().then((res) => {
       let list = res.map((v) => ({ value: v, label: v }));
       setVerticalOptions(list);
+    });
+    getCompetitorList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setCompetitorOptions(list);
+    });
+    getPillarList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setPillarOptions(list);
+    });
+    getBusinessAreaList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setBusinessAreaOptions(list);
     });
   }, []);
 
@@ -49,6 +71,7 @@ const List = () => {
     competitor: [],
     area: "",
     business_benefits: "",
+    multipleVertical: [],
     pillar: "",
     theme: "",
     uniqueZenoti: false,
@@ -83,63 +106,27 @@ const List = () => {
         if (index < 100) {
           d.pillar = "pillar1";
           d.theme = "theme6";
-          d.competitor = {
-            Booker: "N",
-            MBO: "N",
-            Salonbiz: "N",
-            Phorest: "N",
-            Boulevard: "N",
-          };
+          d.competitor = ["booker", "mbo"];
         } else if (index < 200) {
           d.pillar = "pillar2";
           d.theme = "theme5";
-          d.competitor = {
-            Booker: "Y",
-            MBO: "Y",
-            Salonbiz: "Y",
-            Phorest: "Y",
-            Boulevard: "Y",
-          };
+          d.competitor = ["salonbiz", "mbo"];
         } else if (index < 300) {
           d.pillar = "pillar3";
           d.theme = "theme4";
-          d.competitor = {
-            Booker: "Y",
-            MBO: "Y",
-            Salonbiz: "Y",
-            Phorest: "Y",
-            Boulevard: "Y",
-          };
+          d.competitor = ["booker", "mbo"];
         } else if (index < 400) {
           d.pillar = "pillar4";
           d.theme = "theme3";
-          d.competitor = {
-            Booker: "Y",
-            MBO: "Y",
-            Salonbiz: "Y",
-            Phorest: "Y",
-            Boulevard: "Y",
-          };
+          d.competitor = ["booker", "mbo"];
         } else if (index < 500) {
           d.pillar = "pillar5";
           d.theme = "theme2";
-          d.competitor = {
-            Booker: "Y",
-            MBO: "Y",
-            Salonbiz: "Y",
-            Phorest: "Y",
-            Boulevard: "Y",
-          };
+          d.competitor = ["booker", "salonbiz"];
         } else {
           d.pillar = "pillar6";
           d.theme = "theme1";
-          d.competitor = {
-            Booker: "Y",
-            MBO: "Y",
-            Salonbiz: "Y",
-            Phorest: "Y",
-            Boulevard: "Y",
-          };
+          d.competitor = ["booker", "mbo"];
         }
       });
       setCountryOption(countryList);
@@ -264,7 +251,7 @@ const List = () => {
   };
 
   useEffect(() => {
-    if (grid) {
+    if (grid && filter.multipleVertical.length === 1) {
       grid.api.setFilterModel({
         ...grid.api.getFilterModel(),
         vertical: {
@@ -422,14 +409,15 @@ const List = () => {
     },
   ];
 
-  const Competitor = ["Booker", "MBO", "Salonbiz", "Phorest"];
-  Competitor.forEach((data) => {
+  competitorOption.forEach(({ value }) => {
     columnDefs.push({
-      headerName: data,
+      headerName: value,
       flex: 1,
-      field: data,
+      field: value,
       minWidth: 100,
-      hide: !(filter.competitor.includes(data) && filter.competitor.length > 0),
+      hide: !(
+        filter.competitor.includes(value) && filter.competitor.length > 0
+      ),
     });
   });
 
@@ -455,23 +443,20 @@ const List = () => {
 
   const MultipleCompetitorCompare = (value, DataList) => {
     let filterData = new Set();
-    DataList.forEach((data, index) => {
+    DataList.forEach((data) => {
       if (value.competitor.length > 0 && !value.uniqueZenoti) {
-        value.competitor.forEach((val, index) => {
-          if (data.competitor[val] === "N" || data.competitor[val] === "NIA") {
-            data[val] = "✗";
-          } else {
+        value.competitor.forEach((val) => {
+          if (data.competitor.includes(val)) {
             data[val] = "✔";
+          } else {
+            data[val] = "✗";
           }
         });
 
         filterData.add(data);
       } else if (value.competitor.length > 0 && value.uniqueZenoti) {
         const checkingvalue = value.competitor.map((val) => {
-          if (
-            data.differentiator === true &&
-            (data.competitor[val] === "N" || data.competitor[val] === "NIA")
-          ) {
+          if (data.differentiator === true && !data.competitor.includes(val)) {
             data[val] = "✗";
             return true;
           } else {
@@ -479,6 +464,7 @@ const List = () => {
             return false;
           }
         });
+        console.log(checkingvalue);
         if (!checkingvalue.includes(false)) {
           filterData.add(data);
         }
@@ -544,15 +530,24 @@ const List = () => {
         }
       }
 
-      if (filter.area) {
+      if (filter.area && !filter.vertical) {
         if (filter.area.toLowerCase() === d.area.toLowerCase()) {
           DataList.add(d);
         }
-      } else if (!filter.area) {
+      } else if (!filter.area && filter.multipleVertical.length > 1) {
+        const checkdata = filter.multipleVertical.map((value, index) => {
+          return d.vertical.includes(value);
+        });
+        if (!checkdata.includes(false)) {
+          DataList.add(d);
+        }
+      } else {
         DataList.add(d);
       }
     });
+
     if (filter.competitor.length > 0 || filter.uniqueZenoti) {
+      console.log("run");
       DataList = MultipleCompetitorCompare(filter, DataList);
     }
 
@@ -762,13 +757,16 @@ const List = () => {
       </Row>
       <Row>
         <Col sm={12} lg={3} md={12}>
-            <UserFilterComponent
-              filter={filter}
-              handleFilterChange={handleFilterValue}
-              countryOption={countryOption}
-              verticalOption={verticalOption}
-              Filtertheme={theme}
-            />
+          <UserFilterComponent
+            filter={filter}
+            handleFilterChange={handleFilterValue}
+            countryOption={countryOption}
+            verticalOption={verticalOption}
+            competitorOption={competitorOption}
+            pillarOption={pillarOption}
+            businessAreaOption={businessAreaOption}
+            Filtertheme={theme}
+          />
         </Col>
         <Col sm={12} lg={9} md={12}>
           <SearchContext.Provider value={{ searchString: searchValue }}>

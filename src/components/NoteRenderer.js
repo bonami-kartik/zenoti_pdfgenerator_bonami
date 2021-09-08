@@ -8,6 +8,7 @@ const reactElementToString = (element) => {
 }
 export default class NoteRenderer extends React.Component {
   init(params) {
+    console.log(params.toggleNoteModal);
     this.eGui = document.createElement('div');
     this.eGui.innerHTML = `
           <div class="d-flex justify-content-start">

@@ -7,8 +7,12 @@ const UserFilterComponent = ({
   verticalOption,
   countryOption,
   Filtertheme,
+  competitorOption,
+  pillarOption,
+  businessAreaOption,
 }) => {
   const [verticalFilter, setVerticalFilter] = useState("");
+  const [multipleVerticalFilter, setMultipleVerticalFilter] = useState([]);
   const [regionFilter, setRegionFilter] = useState("");
   const [competitorFilter, setCompetitorFilter] = useState([]);
   const [areaFilter, setAreaFilter] = useState("");
@@ -21,9 +25,11 @@ const UserFilterComponent = ({
   const [steps, setSteps] = useState(false);
 
   const applyFilter = () => {
+    console.log(multipleVerticalFilter);
     handleFilterChange({
       vertical: verticalFilter,
       country: regionFilter,
+      multipleVertical: multipleVerticalFilter,
       competitor: competitorFilter,
       area: areaFilter,
       business_benefits: businessFilter,
@@ -66,6 +72,7 @@ const UserFilterComponent = ({
     handleFilterChange({
       vertical: verticalFilter,
       country: regionFilter,
+      multipleVertical: multipleVerticalFilter,
       competitor: competitorFilter,
       area: areaFilter,
       business_benefits: businessFilter,
@@ -86,6 +93,7 @@ const UserFilterComponent = ({
     setVerticalFilter("");
     setRegionFilter("");
     setCompetitorFilter([]);
+    setMultipleVerticalFilter([]);
     setAreaFilter("");
     setBusinessFilter("");
     setPillarFilter("");
@@ -122,6 +130,26 @@ const UserFilterComponent = ({
         spanButton.classList.add("buttonClass-active");
         Filter(Array.from(new Set([...competitorFilter, value])));
       }
+    } else if (firstvalue[0] == "verticalOption") {
+      if (spanButton.classList.value.includes("buttonClass-active")) {
+        spanButton.classList.remove("buttonClass-active");
+        Filter("");
+        let multipleFilter = multipleVerticalFilter;
+        const index = multipleFilter.indexOf(value);
+        if (index > -1) {
+          multipleFilter.splice(index, 1);
+          setMultipleVerticalFilter(multipleFilter);
+          if (multipleVerticalFilter.length === 1) {
+            Filter(multipleVerticalFilter[0]);
+          }
+        }
+      } else {
+        spanButton.classList.add("buttonClass-active");
+        Filter(value);
+        setMultipleVerticalFilter(
+          Array.from(new Set([...multipleVerticalFilter, value]))
+        );
+      }
     } else {
       if (spanButton.classList.value.includes("buttonClass-active")) {
         spanButton.classList.remove("buttonClass-active");
@@ -137,6 +165,7 @@ const UserFilterComponent = ({
       }
     }
   };
+
   const imageDropDown = () => {
     setSteps(!steps);
   };
@@ -215,7 +244,7 @@ const UserFilterComponent = ({
                   return (
                     <span
                       className="buttonClass btn btn-sm verticalOption"
-                      key={value}
+                      key={`verticalOption_${index}`}
                       id={`verticalOption_${index}`}
                       size="sm"
                       onClick={() =>
@@ -243,7 +272,7 @@ const UserFilterComponent = ({
                   return (
                     <span
                       className="buttonClass btn btn-sm countryOption"
-                      key={country}
+                      key={`countryOption_${index}`}
                       id={`countryOption_${index}`}
                       size="sm"
                       onClick={() =>
@@ -267,22 +296,22 @@ const UserFilterComponent = ({
                 <h6>
                   <b>Compare With</b>
                 </h6>
-                {Competitor.map((data, index) => {
+                {competitorOption.map(({ value }, index) => {
                   return (
                     <span
                       className="buttonClass btn btn-sm Competitor"
-                      key={data}
+                      key={`Competitor_${index}`}
                       id={`Competitor_${index}`}
                       size="sm"
                       onClick={() =>
                         onChange(
                           `Competitor_${index}`,
-                          data,
+                          value,
                           setCompetitorFilter
                         )
                       }
                     >
-                      {data}
+                      {value}
                     </span>
                   );
                 })}
@@ -298,7 +327,7 @@ const UserFilterComponent = ({
                   return (
                     <span
                       className="buttonClass btn btn-sm Aval_Business"
-                      key={data}
+                      key={`Aval_Business_${index}`}
                       id={`Aval_Business_${index}`}
                       size="sm"
                       // onClick={() =>
@@ -321,7 +350,7 @@ const UserFilterComponent = ({
                 <h6>
                   <b>Area</b>
                 </h6>
-                {Area.map((data, index) => {
+                {businessAreaOption.map(({ value }, index) => {
                   return (
                     <span
                       className="buttonClass btn btn-sm Area"
@@ -329,10 +358,10 @@ const UserFilterComponent = ({
                       id={`Area_${index}`}
                       size="sm"
                       onClick={() =>
-                        onChange(`Area_${index}`, data, setAreaFilter)
+                        onChange(`Area_${index}`, value, setAreaFilter)
                       }
                     >
-                      {data}
+                      {value}
                     </span>
                   );
                 })}
@@ -348,7 +377,7 @@ const UserFilterComponent = ({
                   return (
                     <span
                       className="buttonClass btn btn-sm Business"
-                      key={data}
+                      key={`Business_${index}`}
                       id={`Business_${index}`}
                       size="sm"
                       onClick={() =>
@@ -368,18 +397,18 @@ const UserFilterComponent = ({
                 <h6>
                   <b>Pillar</b>
                 </h6>
-                {Pillars.map((data, index) => {
+                {pillarOption.map(({ value }, index) => {
                   return (
                     <span
                       className="buttonClass btn btn-sm Pillar"
-                      key={data}
+                      key={`Pillar_${index}`}
                       id={`Pillar_${index}`}
                       size="sm"
                       onClick={() =>
-                        onChange(`Pillar_${index}`, data, setPillarFilter)
+                        onChange(`Pillar_${index}`, value, setPillarFilter)
                       }
                     >
-                      {data}
+                      {value}
                     </span>
                   );
                 })}
