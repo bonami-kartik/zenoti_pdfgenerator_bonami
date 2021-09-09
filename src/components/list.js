@@ -269,6 +269,260 @@ const List = () => {
     }
   }, [filter.vertical, filter.country]);
 
+  const BusinessImpactFilter = (value, DataList) => {
+    let searchData = [];
+    let searchValueText = value;
+    searchValueText = searchValueText.replace(
+      /[-[\]{}()*+?.,\\^$|#\s]/g,
+      "\\$&"
+    );
+    const regex = new RegExp(`${searchValueText}`, "ig");
+    context.searchString = searchValueText;
+    DataList.forEach((data) => {
+      const searchObj = {
+        business_benefits: data.business_benefits,
+      };
+      if (Object.values(searchObj).join().match(regex)) {
+        searchData.push(data);
+      }
+    });
+    return searchData;
+  };
+
+  const MultipleCompetitorCompare = (value, DataList) => {
+    let filterData = new Set();
+    DataList.forEach((data) => {
+      if (value.competitor.length > 0 && !value.uniqueZenoti) {
+        value.competitor.forEach((val) => {
+          if (data.competitor.includes(val)) {
+            data[val] = "✔";
+          } else {
+            data[val] = "✗";
+          }
+        });
+
+        filterData.add(data);
+      } else if (value.competitor.length > 0 && value.uniqueZenoti) {
+        const checkingvalue = value.competitor.map((val) => {
+          if (data.differentiator === true && !data.competitor.includes(val)) {
+            data[val] = "✗";
+            return true;
+          } else {
+            data[val] = "✔";
+            return false;
+          }
+        });
+        if (!checkingvalue.includes(false)) {
+          filterData.add(data);
+        }
+      } else if (value.competitor.length === 0 && value.uniqueZenoti) {
+        if (data.differentiator === true) {
+          filterData.add(data);
+        }
+      }
+    });
+
+    return filterData;
+  };
+
+  const PillarAndTheme = ({ pillar, theme }, DataList) => {
+    let pillarAndthemeList = [];
+    DataList.forEach((data) => {
+      if (data.pillar || data.theme) {
+        if (!pillar && theme) {
+          if (data.theme === theme) {
+            pillarAndthemeList.push(data);
+          }
+        } else if (pillar && !theme) {
+          if (data.pillar === pillar) {
+            pillarAndthemeList.push(data);
+          }
+        } else if (pillar && theme) {
+          if (data.pillar === pillar && data.theme === theme) {
+            pillarAndthemeList.push(data);
+          }
+        }
+      }
+    });
+    return pillarAndthemeList;
+  };
+
+  useEffect(() => {
+    let areaList = new Set();
+    let DataList = new Set();
+
+    defaultData.forEach((d) => {
+      if (!filter.country && !filter.vertical && !filter.competitor) {
+        areaList.add(d.area);
+      } else if (!filter.vertical && filter.country) {
+        if (d.country.toLowerCase() === filter.country.toLowerCase()) {
+          areaList.add(d.area);
+        }
+      } else if (!filter.country && filter.vertical) {
+        if (
+          d.vertical.some(
+            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+          )
+        ) {
+          areaList.add(d.area);
+        }
+      } else {
+        if (
+          d.country.toLowerCase() === filter.country.toLowerCase() &&
+          d.vertical.some(
+            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+          )
+        ) {
+          areaList.add(d.area);
+        }
+      }
+
+      if (filter.area && !filter.vertical) {
+        if (filter.area.toLowerCase() === d.area.toLowerCase()) {
+          DataList.add(d);
+        }
+      } else if (!filter.area && filter.multipleVertical.length > 1) {
+        const checkdata = filter.multipleVertical.map((value, index) => {
+          return d.vertical.includes(value);
+        });
+        if (!checkdata.includes(false)) {
+          DataList.add(d);
+        }
+      } else {
+        DataList.add(d);
+      }
+    });
+
+    if (filter.competitor.length > 0 || filter.uniqueZenoti) {
+      DataList = MultipleCompetitorCompare(filter, DataList);
+    }
+
+    if (filter.business_benefits) {
+      DataList = BusinessImpactFilter(filter.business_benefits, DataList);
+    }
+
+    if (filter.pillar || filter.theme) {
+      DataList = PillarAndTheme(filter, DataList);
+    }
+
+    setTableData(Array.from(DataList));
+
+    setAreaFilterOption(Array.from(areaList));
+    if (grid) {
+      grid.api.destroyFilter("area");
+    }
+  }, [
+    grid,
+    defaultData,
+    filter.vertical,
+    filter.country,
+    filter.competitor.length,
+    filter.area,
+    filter.uniqueZenoti,
+    filter.business_benefits,
+    filter.pillar,
+    filter.theme,
+  ]);
+
+  const changePageSize = (size) => {
+    setPageSize(Number(size));
+    grid.api.paginationSetPageSize(Number(size));
+  };
+
+  const openPdfModal = () => {
+    togglePdfModal(!pdfModal);
+  };
+
+  const toggleNoteModal = (data, isEdit, callBack) => {
+    setSelectedRow({ data, isEdit, callBack });
+    toggleModal(!noteModal);
+  };
+
+  const toggleDelteNoteModal = (data, callBack) => {
+    toggleDeleteModal(!deleteNoteModal);
+    setSelectedRow({ data, callBack });
+  };
+
+  const saveNote = (data) => {
+    const tableDataClone = [...defaultData];
+    tableDataClone.map((t) => {
+      if (t.id === selectedRow.data.id) {
+        t.note = data.note;
+      }
+    });
+    selectedRow.callBack();
+    setDefaultData(tableDataClone);
+    setSelectedRow({});
+    toggleModal(!noteModal);
+  };
+
+  const deleteNote = () => {
+    const tableDataClone = [...defaultData];
+    tableDataClone.map((t) => {
+      if (t.id === selectedRow.data.id) {
+        t.note = "";
+      }
+    });
+    selectedRow.callBack();
+    setDefaultData(tableDataClone);
+    setSelectedRow({});
+    toggleDeleteModal(!deleteNoteModal);
+  };
+
+  const handleFilterChange = ({ vertical, country }) => {
+    if (filter.vertical && filter.country) {
+      return vertical.includes(filter.vertical) && country === filter.country;
+    } else {
+      if (filter.vertical) {
+        return vertical.includes(filter.vertical);
+      }
+      if (filter.country) {
+        return country === filter.country;
+      }
+      return true;
+    }
+  };
+
+  const sortObj =
+    grid && grid.columnApi.getColumnState().filter((c) => c.sort).length > 0
+      ? grid.columnApi.getColumnState().filter((c) => c.sort)[0]
+      : null;
+
+  const sendPublicIpToBackend = useCallback(async () => {
+    try {
+      const userIp = await publicIp.v4();
+
+      if (userIp) {
+        const data = {
+          ip_address: userIp,
+        };
+
+        logVisitorEvent(data);
+      }
+    } catch (e) {}
+  }, []);
+
+  useEffect(() => {
+    sendPublicIpToBackend();
+  }, []);
+  const imageDropDown = () => {
+    setSteps(!steps);
+  };
+
+  const handleFilterValue = (data) => {
+    setFilter(data);
+  };
+
+  useEffect(() => {
+    if (tableData) {
+      let uniqueTheme = new Set();
+      tableData.forEach((data) => {
+        uniqueTheme.add(data.theme);
+      });
+      setTheme(Array.from(uniqueTheme));
+    }
+  }, [tableData]);
+
   const columnDefs = [
     {
       headerName: "Theme",
@@ -420,262 +674,6 @@ const List = () => {
       ),
     });
   });
-
-  const BusinessImpactFilter = (value, DataList) => {
-    let searchData = [];
-    let searchValueText = value;
-    searchValueText = searchValueText.replace(
-      /[-[\]{}()*+?.,\\^$|#\s]/g,
-      "\\$&"
-    );
-    const regex = new RegExp(`${searchValueText}`, "ig");
-    context.searchString = searchValueText;
-    DataList.forEach((data) => {
-      const searchObj = {
-        business_benefits: data.business_benefits,
-      };
-      if (Object.values(searchObj).join().match(regex)) {
-        searchData.push(data);
-      }
-    });
-    return searchData;
-  };
-
-  const MultipleCompetitorCompare = (value, DataList) => {
-    let filterData = new Set();
-    DataList.forEach((data) => {
-      if (value.competitor.length > 0 && !value.uniqueZenoti) {
-        value.competitor.forEach((val) => {
-          if (data.competitor.includes(val)) {
-            data[val] = "✔";
-          } else {
-            data[val] = "✗";
-          }
-        });
-
-        filterData.add(data);
-      } else if (value.competitor.length > 0 && value.uniqueZenoti) {
-        const checkingvalue = value.competitor.map((val) => {
-          if (data.differentiator === true && !data.competitor.includes(val)) {
-            data[val] = "✗";
-            return true;
-          } else {
-            data[val] = "✔";
-            return false;
-          }
-        });
-        console.log(checkingvalue);
-        if (!checkingvalue.includes(false)) {
-          filterData.add(data);
-        }
-      } else if (value.competitor.length === 0 && value.uniqueZenoti) {
-        if (data.differentiator === true) {
-          filterData.add(data);
-        }
-      }
-    });
-
-    return filterData;
-  };
-
-  const PillarAndTheme = ({ pillar, theme }, DataList) => {
-    let pillarAndthemeList = [];
-    DataList.forEach((data) => {
-      if (data.pillar || data.theme) {
-        if (!pillar && theme) {
-          if (data.theme === theme) {
-            pillarAndthemeList.push(data);
-          }
-        } else if (pillar && !theme) {
-          if (data.pillar === pillar) {
-            pillarAndthemeList.push(data);
-          }
-        } else if (pillar && theme) {
-          if (data.pillar === pillar && data.theme === theme) {
-            pillarAndthemeList.push(data);
-          }
-        }
-      }
-    });
-    return pillarAndthemeList;
-  };
-
-  useEffect(() => {
-    let areaList = new Set();
-    let DataList = new Set();
-
-    defaultData.forEach((d) => {
-      if (!filter.country && !filter.vertical && !filter.competitor) {
-        areaList.add(d.area);
-      } else if (!filter.vertical && filter.country) {
-        if (d.country.toLowerCase() === filter.country.toLowerCase()) {
-          areaList.add(d.area);
-        }
-      } else if (!filter.country && filter.vertical) {
-        if (
-          d.vertical.some(
-            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
-          )
-        ) {
-          areaList.add(d.area);
-        }
-      } else {
-        if (
-          d.country.toLowerCase() === filter.country.toLowerCase() &&
-          d.vertical.some(
-            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
-          )
-        ) {
-          areaList.add(d.area);
-        }
-      }
-
-      if (filter.area && !filter.vertical) {
-        if (filter.area.toLowerCase() === d.area.toLowerCase()) {
-          DataList.add(d);
-        }
-      } else if (!filter.area && filter.multipleVertical.length > 1) {
-        const checkdata = filter.multipleVertical.map((value, index) => {
-          return d.vertical.includes(value);
-        });
-        if (!checkdata.includes(false)) {
-          DataList.add(d);
-        }
-      } else {
-        DataList.add(d);
-      }
-    });
-
-    if (filter.competitor.length > 0 || filter.uniqueZenoti) {
-      console.log("run");
-      DataList = MultipleCompetitorCompare(filter, DataList);
-    }
-
-    if (filter.business_benefits) {
-      DataList = BusinessImpactFilter(filter.business_benefits, DataList);
-    }
-
-    if (filter.pillar || filter.theme) {
-      DataList = PillarAndTheme(filter, DataList);
-    }
-
-    setTableData(Array.from(DataList));
-
-    setAreaFilterOption(Array.from(areaList));
-    if (grid) {
-      grid.api.destroyFilter("area");
-    }
-  }, [
-    grid,
-    defaultData,
-    filter.vertical,
-    filter.country,
-    filter.competitor.length,
-    filter.area,
-    filter.uniqueZenoti,
-    filter.business_benefits,
-    filter.pillar,
-    filter.theme,
-  ]);
-
-  const changePageSize = (size) => {
-    setPageSize(Number(size));
-    grid.api.paginationSetPageSize(Number(size));
-  };
-
-  const openPdfModal = () => {
-    togglePdfModal(!pdfModal);
-  };
-
-  const toggleNoteModal = (data, isEdit, callBack) => {
-    setSelectedRow({ data, isEdit, callBack });
-    toggleModal(!noteModal);
-  };
-
-  const toggleDelteNoteModal = (data, callBack) => {
-    toggleDeleteModal(!deleteNoteModal);
-    setSelectedRow({ data, callBack });
-  };
-
-  const saveNote = (data) => {
-    const tableDataClone = [...defaultData];
-    tableDataClone.map((t) => {
-      if (t.id === selectedRow.data.id) {
-        t.note = data.note;
-      }
-    });
-    selectedRow.callBack();
-    setDefaultData(tableDataClone);
-    setSelectedRow({});
-    toggleModal(!noteModal);
-  };
-
-  const deleteNote = () => {
-    const tableDataClone = [...defaultData];
-    tableDataClone.map((t) => {
-      if (t.id === selectedRow.data.id) {
-        t.note = "";
-      }
-    });
-    selectedRow.callBack();
-    setDefaultData(tableDataClone);
-    setSelectedRow({});
-    toggleDeleteModal(!deleteNoteModal);
-  };
-
-  const handleFilterChange = ({ vertical, country }) => {
-    if (filter.vertical && filter.country) {
-      return vertical.includes(filter.vertical) && country === filter.country;
-    } else {
-      if (filter.vertical) {
-        return vertical.includes(filter.vertical);
-      }
-      if (filter.country) {
-        return country === filter.country;
-      }
-      return true;
-    }
-  };
-
-  const sortObj =
-    grid && grid.columnApi.getColumnState().filter((c) => c.sort).length > 0
-      ? grid.columnApi.getColumnState().filter((c) => c.sort)[0]
-      : null;
-
-  const sendPublicIpToBackend = useCallback(async () => {
-    try {
-      const userIp = await publicIp.v4();
-
-      if (userIp) {
-        const data = {
-          ip_address: userIp,
-        };
-
-        logVisitorEvent(data);
-      }
-    } catch (e) {}
-  }, []);
-
-  useEffect(() => {
-    sendPublicIpToBackend();
-  }, []);
-  const imageDropDown = () => {
-    setSteps(!steps);
-  };
-
-  const handleFilterValue = (data) => {
-    setFilter(data);
-  };
-
-  useEffect(() => {
-    if (tableData) {
-      let uniqueTheme = new Set();
-      tableData.forEach((data) => {
-        uniqueTheme.add(data.theme);
-      });
-      setTheme(Array.from(uniqueTheme));
-    }
-  }, [tableData]);
 
   return (
     <>

@@ -25,7 +25,6 @@ const UserFilterComponent = ({
   const [steps, setSteps] = useState(false);
 
   const applyFilter = () => {
-    console.log(multipleVerticalFilter);
     handleFilterChange({
       vertical: verticalFilter,
       country: regionFilter,
