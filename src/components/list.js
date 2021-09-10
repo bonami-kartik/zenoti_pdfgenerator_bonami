@@ -251,7 +251,7 @@ const List = () => {
   };
 
   useEffect(() => {
-    if (grid && filter.multipleVertical.length === 1) {
+    if (grid) {
       grid.api.setFilterModel({
         ...grid.api.getFilterModel(),
         vertical: {
