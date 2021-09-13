@@ -17,11 +17,11 @@ const getCompetitorList = () => network.publicGet(`/competitors/list`);
 
 //pillar
 
-const getPillarList = () => network.publicGet(`brand_pillars/list`);
+const getPillarList = () => network.publicGet(`/brand_pillars/list`);
 
 //business_area
 
-const getBusinessAreaList = () => network.publicGet(`business_area/list`);
+const getBusinessAreaList = () => network.publicGet(`/business_area/list`);
 
 // template
 const getAdminList = () => network.publicGet(`/template/list`);

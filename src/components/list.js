@@ -72,7 +72,7 @@ const List = () => {
     area: "",
     business_benefits: "",
     multipleVertical: [],
-    pillar: "",
+    pillar: [],
     theme: "",
     uniqueZenoti: false,
   });
@@ -102,30 +102,30 @@ const List = () => {
           areaList.push(d.area);
         }
         setAreaFilterOption(areaList);
-
+        //testing data inserting in template list api
         if (index < 100) {
-          d.pillar = "pillar1";
-          d.theme = "theme6";
+          d.brand_pillars = ["grow"];
+          d.themes = ["theme6"];
           d.competitor = ["booker", "mbo"];
         } else if (index < 200) {
-          d.pillar = "pillar2";
-          d.theme = "theme5";
+          d.brand_pillars = ["elevate cx", "unify", "grow"];
+          d.themes = ["theme5"];
           d.competitor = ["salonbiz", "mbo"];
         } else if (index < 300) {
-          d.pillar = "pillar3";
-          d.theme = "theme4";
+          d.brand_pillars = ["unify", "automate", "grow"];
+          d.themes = ["theme4"];
           d.competitor = ["booker", "mbo"];
         } else if (index < 400) {
-          d.pillar = "pillar4";
-          d.theme = "theme3";
+          d.brand_pillars = ["elevate cx"];
+          d.themes = ["theme3"];
           d.competitor = ["booker", "mbo"];
         } else if (index < 500) {
-          d.pillar = "pillar5";
-          d.theme = "theme2";
+          d.brand_pillars = ["elevate cx", "grow"];
+          d.themes = ["theme2"];
           d.competitor = ["booker", "salonbiz"];
         } else {
-          d.pillar = "pillar6";
-          d.theme = "theme1";
+          d.brand_pillars = ["automate", "grow"];
+          d.themes = ["theme1"];
           d.competitor = ["booker", "mbo"];
         }
       });
@@ -326,21 +326,33 @@ const List = () => {
   };
 
   const PillarAndTheme = ({ pillar, theme }, DataList) => {
-    let pillarAndthemeList = [];
+    let pillarAndthemeList = new Set();
     DataList.forEach((data) => {
-      if (data.pillar || data.theme) {
-        if (!pillar && theme) {
-          if (data.theme === theme) {
-            pillarAndthemeList.push(data);
-          }
-        } else if (pillar && !theme) {
-          if (data.pillar === pillar) {
-            pillarAndthemeList.push(data);
-          }
+      if (data.brand_pillars || data.themes) {
+        if (!pillar.length > 0 && theme) {
+          data.themes.forEach((table_theme) => {
+            if (table_theme === theme) {
+              pillarAndthemeList.add(data);
+            }
+          });
+        } else if (pillar.length > 0 && !theme) {
+          data.brand_pillars.forEach((data_pillar) => {
+            pillar.forEach((pillar_data) => {
+              if (data_pillar === pillar_data) {
+                pillarAndthemeList.add(data);
+              }
+            });
+          });
         } else if (pillar && theme) {
-          if (data.pillar === pillar && data.theme === theme) {
-            pillarAndthemeList.push(data);
-          }
+          data.themes.forEach((table_theme) => {
+            data.brand_pillars.forEach((table_pillar) => {
+              pillar.forEach((pillar_data) => {
+                if (table_pillar === pillar_data && table_theme === theme) {
+                  pillarAndthemeList.add(data);
+                }
+              });
+            });
+          });
         }
       }
     });
@@ -401,7 +413,7 @@ const List = () => {
       DataList = BusinessImpactFilter(filter.business_benefits, DataList);
     }
 
-    if (filter.pillar || filter.theme) {
+    if (filter.pillar.length > 0 || filter.theme) {
       DataList = PillarAndTheme(filter, DataList);
     }
 
@@ -420,7 +432,7 @@ const List = () => {
     filter.area,
     filter.uniqueZenoti,
     filter.business_benefits,
-    filter.pillar,
+    filter.pillar.length,
     filter.theme,
   ]);
 
@@ -514,19 +526,37 @@ const List = () => {
   };
 
   useEffect(() => {
-    if (tableData) {
-      let uniqueTheme = new Set();
-      tableData.forEach((data) => {
-        uniqueTheme.add(data.theme);
-      });
-      setTheme(Array.from(uniqueTheme));
-    }
-  }, [tableData]);
+    // if (filter.pillar.length > 0) {
+    //   let themeData = new Set();
+    //   filter.pillar.forEach((pillarSelectData) => {
+    //     pillarOption.forEach(({ value }) => {
+    //       if (value[pillarSelectData]) {
+    //         value[pillarSelectData].forEach((data) => {
+    //           themeData.add(data);
+    //         });
+    //       }
+    //     });
+    //   });
+    //   setTheme(Array.from(themeData));
+    // } else {
+    const uniqueTheme = [
+      "theme1",
+      "theme2",
+      "theme3",
+      "theme4",
+      "theme5",
+      "theme6",
+      "theme7",
+      "theme8",
+    ];
+    setTheme(uniqueTheme);
+    // }
+  }, []);
 
   const columnDefs = [
     {
       headerName: "Theme",
-      field: "theme",
+      field: "themes",
       flex: 2,
       minWidth: 120,
       tooltipField: "theme",
@@ -534,7 +564,7 @@ const List = () => {
     },
     {
       headerName: "Pillar",
-      field: "pillar",
+      field: "brand_pillars",
       flex: 2,
       minWidth: 120,
       tooltipField: "pillar",

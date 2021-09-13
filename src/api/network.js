@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken, removeItemFromStorage } from "../utils/helper";
 // const baseUrl = process.env.API_URL;
-const baseUrl = "https://ojzbudp594.execute-api.ap-south-1.amazonaws.com/dev/";
+const baseUrl = "https://ojzbudp594.execute-api.ap-south-1.amazonaws.com/dev";
 
 const HandleError = (err) => {
   if (err.response && err.response.status === 401) {

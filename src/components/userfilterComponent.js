@@ -17,13 +17,13 @@ const UserFilterComponent = ({
   const [competitorFilter, setCompetitorFilter] = useState([]);
   const [areaFilter, setAreaFilter] = useState("");
   const [businessFilter, setBusinessFilter] = useState("");
-  const [pillarFilter, setPillarFilter] = useState("");
+  const [pillarFilter, setPillarFilter] = useState([]);
   const [themeFilter, setThemeFilter] = useState("");
+  const [dependentThemeFilter, setDependentThemeFilter] = useState([]);
   const [uniqueZenoti, setUniqueZenoti] = useState(false);
   const [scrollOpen, setScrollOpen] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [steps, setSteps] = useState(false);
-
   const applyFilter = () => {
     handleFilterChange({
       vertical: verticalFilter,
@@ -54,6 +54,25 @@ const UserFilterComponent = ({
     const themeValue = document.getElementById("themefilter").value;
     setThemeFilter(themeValue);
   };
+
+  // console.log(pillarFilter.length);
+  useEffect(() => {
+    if (pillarFilter.length > 0) {
+      let themeData = new Set();
+      pillarFilter.forEach((pillarSelectData) => {
+        pillarOption.forEach(({ value }) => {
+          if (value[pillarSelectData]) {
+            value[pillarSelectData].forEach((data) => {
+              themeData.add(data);
+            });
+          }
+        });
+      });
+      setDependentThemeFilter(Array.from(themeData));
+    } else {
+      setDependentThemeFilter(Filtertheme);
+    }
+  }, [pillarFilter.length, Filtertheme]);
 
   useEffect(() => {
     if (window.screen.availWidth < 770) {
@@ -95,7 +114,7 @@ const UserFilterComponent = ({
     setMultipleVerticalFilter([]);
     setAreaFilter("");
     setBusinessFilter("");
-    setPillarFilter("");
+    setPillarFilter([]);
     setThemeFilter("");
     setUniqueZenoti(false);
     const filterObj = { ...filter };
@@ -107,7 +126,6 @@ const UserFilterComponent = ({
   const Competitor = ["Booker", "MBO", "Salonbiz", "Phorest", "Boulevard"];
   const Area = ["R&A", "Packages", "Payments", "Reports & Analytics"];
   const BusinessBenefits = ["Streamline operations", "unify the business"];
-  const Pillars = ["pillar1", "pillar2", "pillar3", "pillar4", "pillar5"];
 
   const onChange = (index, value, Filter) => {
     const firstvalue = index.split("_");
@@ -149,6 +167,21 @@ const UserFilterComponent = ({
           Array.from(new Set([...multipleVerticalFilter, value]))
         );
       }
+    } else if (firstvalue[0] == "Pillar") {
+      const [destructurePillarData] = value;
+      if (spanButton.classList.value.includes("buttonClass-active")) {
+        spanButton.classList.remove("buttonClass-active");
+
+        let newPillarFilter = pillarFilter;
+        const index = newPillarFilter.indexOf(destructurePillarData);
+        if (index > -1) {
+          newPillarFilter.splice(index, 1);
+          Filter(Array.from(new Set(newPillarFilter)));
+        }
+      } else {
+        spanButton.classList.add("buttonClass-active");
+        Filter(Array.from(new Set([...pillarFilter, destructurePillarData])));
+      }
     } else {
       if (spanButton.classList.value.includes("buttonClass-active")) {
         spanButton.classList.remove("buttonClass-active");
@@ -168,6 +201,32 @@ const UserFilterComponent = ({
   const imageDropDown = () => {
     setSteps(!steps);
   };
+
+  // const onThemeUpdate = () => {
+  //   console.log(pillarFilter);
+  //   if (pillarFilter.length > 0) {
+  //   }
+  // let themeData = new Set();
+  // if (pillarFilter.length > 0) {
+  //   filterOption.forEach((dataValue)=>{
+  //     themeData.add(dataValue);
+  //     console.log(dataValue);
+  //   });
+  //   themeData.add(filterOption);
+  // }
+
+  // pillarOption.forEach(({ value }) => {
+  //   // const [data] = value;
+  //   if (value[pillarKey]) {
+  //     value[pillarKey].forEach((dataKey) => {
+  //       themeData.add(dataKey);
+  //     });
+  //   }
+  // newPillarOption.add(data[pillarKey]);
+  // });
+
+  // setFilterOption(Array.from(themeData));
+  // };
 
   return (
     <div className="mb-4">
@@ -403,11 +462,16 @@ const UserFilterComponent = ({
                       key={`Pillar_${index}`}
                       id={`Pillar_${index}`}
                       size="sm"
-                      onClick={() =>
-                        onChange(`Pillar_${index}`, value, setPillarFilter)
-                      }
+                      onClick={() => {
+                        onChange(
+                          `Pillar_${index}`,
+                          Object.keys(value),
+                          setPillarFilter
+                        );
+                        // onThemeUpdate(Object.keys(value));
+                      }}
                     >
-                      {value}
+                      {Object.keys(value)}
                     </span>
                   );
                 })}
@@ -429,7 +493,7 @@ const UserFilterComponent = ({
                     style={{ width: "70%" }}
                   >
                     <option value="">Select Theme</option>
-                    {Filtertheme.map((data, index) => {
+                    {dependentThemeFilter.map((data, index) => {
                       return (
                         <option key={index} value={data}>
                           {data}
