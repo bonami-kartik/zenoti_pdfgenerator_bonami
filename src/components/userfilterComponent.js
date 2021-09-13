@@ -6,7 +6,6 @@ const UserFilterComponent = ({
   handleFilterChange,
   verticalOption,
   countryOption,
-  Filtertheme,
   competitorOption,
   pillarOption,
   businessAreaOption,
@@ -70,9 +69,15 @@ const UserFilterComponent = ({
       });
       setDependentThemeFilter(Array.from(themeData));
     } else {
-      setDependentThemeFilter(Filtertheme);
+      let themeData = new Set();
+      pillarOption.forEach(({ value }) => {
+        value[Object.keys(value)].forEach((data) => {
+          themeData.add(data);
+        });
+      });
+      setDependentThemeFilter(Array.from(themeData));
     }
-  }, [pillarFilter.length, Filtertheme]);
+  }, [pillarFilter.length, pillarOption]);
 
   useEffect(() => {
     if (window.screen.availWidth < 770) {

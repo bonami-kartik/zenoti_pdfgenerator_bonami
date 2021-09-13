@@ -109,7 +109,7 @@ const List = () => {
           d.competitor = ["booker", "mbo"];
         } else if (index < 200) {
           d.brand_pillars = ["elevate cx", "unify", "grow"];
-          d.themes = ["theme5"];
+          d.themes = ["theme1"];
           d.competitor = ["salonbiz", "mbo"];
         } else if (index < 300) {
           d.brand_pillars = ["unify", "automate", "grow"];
@@ -125,7 +125,7 @@ const List = () => {
           d.competitor = ["booker", "salonbiz"];
         } else {
           d.brand_pillars = ["automate", "grow"];
-          d.themes = ["theme1"];
+          d.themes = ["theme5"];
           d.competitor = ["booker", "mbo"];
         }
       });
@@ -330,29 +330,37 @@ const List = () => {
     DataList.forEach((data) => {
       if (data.brand_pillars || data.themes) {
         if (!pillar.length > 0 && theme) {
-          data.themes.forEach((table_theme) => {
-            if (table_theme === theme) {
-              pillarAndthemeList.add(data);
+          if (data.themes.includes(theme)) {
+            pillarAndthemeList.add(data);
+          }
+        } else if (pillar.length > 0 && !theme) {
+          let dataChecked = pillar.map((pillar_data) => {
+            if (data.brand_pillars.includes(pillar_data)) {
+              return true;
+            } else {
+              return false;
             }
           });
-        } else if (pillar.length > 0 && !theme) {
-          data.brand_pillars.forEach((data_pillar) => {
-            pillar.forEach((pillar_data) => {
-              if (data_pillar === pillar_data) {
-                pillarAndthemeList.add(data);
-              }
-            });
+
+          if (!dataChecked.includes(false)) {
+            pillarAndthemeList.add(data);
+          }
+        } else if (pillar.length > 0 && theme) {
+          let dataChecked = pillar.map((pillar_data) => {
+            if (
+              data.brand_pillars.includes(pillar_data) &&
+              data.themes.includes(theme)
+            ) {
+              return true;
+            } else {
+              return false;
+            }
           });
-        } else if (pillar && theme) {
-          data.themes.forEach((table_theme) => {
-            data.brand_pillars.forEach((table_pillar) => {
-              pillar.forEach((pillar_data) => {
-                if (table_pillar === pillar_data && table_theme === theme) {
-                  pillarAndthemeList.add(data);
-                }
-              });
-            });
-          });
+          console.log(dataChecked);
+
+          if (!dataChecked.includes(false)) {
+            pillarAndthemeList.add(data);
+          }
         }
       }
     });
@@ -526,19 +534,6 @@ const List = () => {
   };
 
   useEffect(() => {
-    // if (filter.pillar.length > 0) {
-    //   let themeData = new Set();
-    //   filter.pillar.forEach((pillarSelectData) => {
-    //     pillarOption.forEach(({ value }) => {
-    //       if (value[pillarSelectData]) {
-    //         value[pillarSelectData].forEach((data) => {
-    //           themeData.add(data);
-    //         });
-    //       }
-    //     });
-    //   });
-    //   setTheme(Array.from(themeData));
-    // } else {
     const uniqueTheme = [
       "theme1",
       "theme2",
@@ -550,7 +545,6 @@ const List = () => {
       "theme8",
     ];
     setTheme(uniqueTheme);
-    // }
   }, []);
 
   const columnDefs = [
