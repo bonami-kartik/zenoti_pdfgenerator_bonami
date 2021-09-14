@@ -64,7 +64,6 @@ const List = () => {
   const [pageSize, setPageSize] = useState(10);
   const [areaFilterOption, setAreaFilterOption] = useState([]);
   const [steps, setSteps] = useState(false);
-  const [theme, setTheme] = useState([]);
   const [filter, setFilter] = useState({
     vertical: "",
     country: "",
@@ -292,7 +291,7 @@ const List = () => {
   const MultipleCompetitorCompare = (value, DataList) => {
     let filterData = new Set();
     DataList.forEach((data) => {
-      if (value.competitor.length > 0 && !value.uniqueZenoti) {
+      if (value.competitor.length && !value.uniqueZenoti) {
         value.competitor.forEach((val) => {
           if (data.competitor.includes(val)) {
             data[val] = "✔";
@@ -302,7 +301,7 @@ const List = () => {
         });
 
         filterData.add(data);
-      } else if (value.competitor.length > 0 && value.uniqueZenoti) {
+      } else if (value.competitor.length && value.uniqueZenoti) {
         const checkingvalue = value.competitor.map((val) => {
           if (data.differentiator === true && !data.competitor.includes(val)) {
             data[val] = "✗";
@@ -329,11 +328,11 @@ const List = () => {
     let pillarAndthemeList = new Set();
     DataList.forEach((data) => {
       if (data.brand_pillars || data.themes) {
-        if (!pillar.length > 0 && theme) {
+        if (!pillar.length && theme) {
           if (data.themes.includes(theme)) {
             pillarAndthemeList.add(data);
           }
-        } else if (pillar.length > 0 && !theme) {
+        } else if (pillar.length && !theme) {
           let dataChecked = pillar.map((pillar_data) => {
             if (data.brand_pillars.includes(pillar_data)) {
               return true;
@@ -345,7 +344,7 @@ const List = () => {
           if (!dataChecked.includes(false)) {
             pillarAndthemeList.add(data);
           }
-        } else if (pillar.length > 0 && theme) {
+        } else if (pillar.length && theme) {
           let dataChecked = pillar.map((pillar_data) => {
             if (
               data.brand_pillars.includes(pillar_data) &&
@@ -413,7 +412,7 @@ const List = () => {
       }
     });
 
-    if (filter.competitor.length > 0 || filter.uniqueZenoti) {
+    if (filter.competitor.length || filter.uniqueZenoti) {
       DataList = MultipleCompetitorCompare(filter, DataList);
     }
 
@@ -421,7 +420,7 @@ const List = () => {
       DataList = BusinessImpactFilter(filter.business_benefits, DataList);
     }
 
-    if (filter.pillar.length > 0 || filter.theme) {
+    if (filter.pillar.length || filter.theme) {
       DataList = PillarAndTheme(filter, DataList);
     }
 
@@ -532,20 +531,6 @@ const List = () => {
   const handleFilterValue = (data) => {
     setFilter(data);
   };
-
-  useEffect(() => {
-    const uniqueTheme = [
-      "theme1",
-      "theme2",
-      "theme3",
-      "theme4",
-      "theme5",
-      "theme6",
-      "theme7",
-      "theme8",
-    ];
-    setTheme(uniqueTheme);
-  }, []);
 
   const columnDefs = [
     {
@@ -694,7 +679,7 @@ const List = () => {
       field: value,
       minWidth: 100,
       hide: !(
-        filter.competitor.includes(value) && filter.competitor.length > 0
+        filter.competitor.includes(value) && filter.competitor.length
       ),
     });
   });
@@ -787,7 +772,6 @@ const List = () => {
             competitorOption={competitorOption}
             pillarOption={pillarOption}
             businessAreaOption={businessAreaOption}
-            Filtertheme={theme}
           />
         </Col>
         <Col sm={12} lg={9} md={12}>

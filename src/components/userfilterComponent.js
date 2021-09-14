@@ -56,7 +56,7 @@ const UserFilterComponent = ({
 
   // console.log(pillarFilter.length);
   useEffect(() => {
-    if (pillarFilter.length > 0) {
+    if (pillarFilter.length) {
       let themeData = new Set();
       pillarFilter.forEach((pillarSelectData) => {
         pillarOption.forEach(({ value }) => {
@@ -206,32 +206,6 @@ const UserFilterComponent = ({
   const imageDropDown = () => {
     setSteps(!steps);
   };
-
-  // const onThemeUpdate = () => {
-  //   console.log(pillarFilter);
-  //   if (pillarFilter.length > 0) {
-  //   }
-  // let themeData = new Set();
-  // if (pillarFilter.length > 0) {
-  //   filterOption.forEach((dataValue)=>{
-  //     themeData.add(dataValue);
-  //     console.log(dataValue);
-  //   });
-  //   themeData.add(filterOption);
-  // }
-
-  // pillarOption.forEach(({ value }) => {
-  //   // const [data] = value;
-  //   if (value[pillarKey]) {
-  //     value[pillarKey].forEach((dataKey) => {
-  //       themeData.add(dataKey);
-  //     });
-  //   }
-  // newPillarOption.add(data[pillarKey]);
-  // });
-
-  // setFilterOption(Array.from(themeData));
-  // };
 
   return (
     <div className="mb-4">
