@@ -78,6 +78,12 @@ background-color: white;
   visibility: hidden;
 }
 
+.switch2 {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
 .round {
   cursor: pointer;
   text-indent: -9999px;
@@ -104,12 +110,19 @@ background-color: white;
   border-radius: 90px;
   transition: 0.3s;
 }
-
 .switch:checked + .round {
   background: #33ad6a;
 }
 
 .switch:checked + .round:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+.switch2:checked + .round {
+  background: #33ad6a;
+}
+
+.switch2:checked + .round:after {
   left: calc(100% - 5px);
   transform: translateX(-100%);
 }

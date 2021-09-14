@@ -115,6 +115,7 @@ const UserFilterComponent = ({
       }
     });
     document.getElementById("switch").checked = false;
+    document.getElementById("switch2").checked = false;
     setVerticalFilter("");
     setRegionFilter("");
     setCompetitorFilter([]);
@@ -367,35 +368,16 @@ const UserFilterComponent = ({
                 <h6>
                   <b>Available for small business</b>
                 </h6>
-                {/* {Competitor.map((data, index) => {
-                  return (
-                    <span
-                      className="buttonClass btn btn-sm Aval_Business"
-                      key={`Aval_Business_${index}`}
-                      id={`Aval_Business_${index}`}
-                      size="sm"
-                      // onClick={() =>
-                      //   onChange(
-                      //     `Aval_Business_${index}`,
-                      //     data,
-                      //     setCompetitorFilter
-                      //   )
-                      // }
-                    >
-                      {data}
-                    </span>
-                  );
-                })} */}
                 <div className="d-flex justify-content-center">
                   <input
                     type="checkbox"
-                    id="switch"
-                    className="switch"
+                    id="switch2"
+                    className="switch2"
                     onChange={() => {
                       setSmallBiz(!smallBiz);
                     }}
                   />
-                  <label className="round" htmlFor="switch">
+                  <label className="round" htmlFor="switch2">
                     Toggle
                   </label>
                 </div>

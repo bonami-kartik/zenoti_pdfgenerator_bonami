@@ -289,7 +289,7 @@ const List = () => {
               return false;
             }
           });
-
+          console.log(dataChecked);
           if (!dataChecked.includes(false)) {
             pillarAndthemeList.add(data);
           }
@@ -304,7 +304,6 @@ const List = () => {
               return false;
             }
           });
-          console.log(dataChecked);
 
           if (!dataChecked.includes(false)) {
             pillarAndthemeList.add(data);
