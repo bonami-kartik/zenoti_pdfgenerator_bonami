@@ -20,6 +20,7 @@ const UserFilterComponent = ({
   const [themeFilter, setThemeFilter] = useState("");
   const [dependentThemeFilter, setDependentThemeFilter] = useState([]);
   const [uniqueZenoti, setUniqueZenoti] = useState(false);
+  const [smallBiz, setSmallBiz] = useState(false);
   const [scrollOpen, setScrollOpen] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [steps, setSteps] = useState(false);
@@ -34,6 +35,7 @@ const UserFilterComponent = ({
       pillar: pillarFilter,
       theme: themeFilter,
       uniqueZenoti,
+      smallBiz,
     });
   };
 
@@ -54,7 +56,6 @@ const UserFilterComponent = ({
     setThemeFilter(themeValue);
   };
 
-  // console.log(pillarFilter.length);
   useEffect(() => {
     if (pillarFilter.length) {
       let themeData = new Set();
@@ -102,8 +103,9 @@ const UserFilterComponent = ({
       pillar: pillarFilter,
       theme: themeFilter,
       uniqueZenoti,
+      smallBiz,
     });
-  }, [uniqueZenoti]);
+  }, [uniqueZenoti, smallBiz]);
 
   const resetFilter = () => {
     const AllButton = document.querySelectorAll(".buttonClass");
@@ -121,6 +123,7 @@ const UserFilterComponent = ({
     setBusinessFilter("");
     setPillarFilter([]);
     setThemeFilter("");
+    setSmallBiz(false);
     setUniqueZenoti(false);
     const filterObj = { ...filter };
     Object.keys(filterObj).map((key) => (filterObj[key] = ""));
@@ -129,8 +132,12 @@ const UserFilterComponent = ({
 
   //testing data filters api alternative
   const Competitor = ["Booker", "MBO", "Salonbiz", "Phorest", "Boulevard"];
-  const Area = ["R&A", "Packages", "Payments", "Reports & Analytics"];
-  const BusinessBenefits = ["Streamline operations", "unify the business"];
+
+  const BusinessBenefits = [
+    "Streamline operations",
+    "unify the business",
+    "Grow the business",
+  ];
 
   const onChange = (index, value, Filter) => {
     const firstvalue = index.split("_");
@@ -360,7 +367,7 @@ const UserFilterComponent = ({
                 <h6>
                   <b>Available for small business</b>
                 </h6>
-                {Competitor.map((data, index) => {
+                {/* {Competitor.map((data, index) => {
                   return (
                     <span
                       className="buttonClass btn btn-sm Aval_Business"
@@ -378,7 +385,20 @@ const UserFilterComponent = ({
                       {data}
                     </span>
                   );
-                })}
+                })} */}
+                <div className="d-flex justify-content-center">
+                  <input
+                    type="checkbox"
+                    id="switch"
+                    className="switch"
+                    onChange={() => {
+                      setSmallBiz(!smallBiz);
+                    }}
+                  />
+                  <label className="round" htmlFor="switch">
+                    Toggle
+                  </label>
+                </div>
                 <hr />
               </Col>
             </Row>

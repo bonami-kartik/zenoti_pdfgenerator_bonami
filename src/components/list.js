@@ -19,7 +19,6 @@ import { SearchContext } from "./searchContext";
 import AreaFilter from "./AreaFilter";
 import { listFilterIcon } from "../utils/helper";
 import publicIp from "public-ip";
-// import Data from "./data.json";
 import UserFilterComponent from "./userfilterComponent";
 
 const pageSizes = [10, 20, 30, 40, 50, 100, 500];
@@ -74,6 +73,7 @@ const List = () => {
     pillar: [],
     theme: "",
     uniqueZenoti: false,
+    smallBiz: false,
   });
 
   useEffect(() => {
@@ -132,82 +132,6 @@ const List = () => {
       setDefaultData(res);
       setFecthing(false);
     });
-
-    // let countryList = [];
-    // let areaList = [];
-    // Data.forEach((d, index) => {
-    //   if (d.country && !countryList.includes(d.country)) {
-    //     countryList.push(d.country);
-    //   }
-    //   if (d.area && !areaList.includes(d.area)) {
-    //     areaList.push(d.area);
-    //   }
-    //   setAreaFilterOption(areaList);
-    //   if (index < 10) {
-    //     d.pillar = "pillar1";
-    //     d.theme = "theme6";
-    //     d.competitor = {
-    //       Booker: "Y",
-    //       MBO: "N",
-    //       Salonbiz: "Y",
-    //       Phorest: "Y",
-    //       Boulevard: "Y",
-    //     };
-    //   } else if (index < 20) {
-    //     d.pillar = "pillar2";
-    //     d.theme = "theme5";
-    //     d.competitor = {
-    //       Booker: "N",
-    //       MBO: "N",
-    //       Salonbiz: "Y",
-    //       Phorest: "Y",
-    //       Boulevard: "Y",
-    //     };
-    //   } else if (index < 30) {
-    //     d.pillar = "pillar3";
-    //     d.theme = "theme4";
-    //     d.competitor = {
-    //       Booker: "Y",
-    //       MBO: "Y",
-    //       Salonbiz: "Y",
-    //       Phorest: "Y",
-    //       Boulevard: "Y",
-    //     };
-    //   } else if (index < 40) {
-    //     d.pillar = "pillar4";
-    //     d.theme = "theme3";
-    //     d.competitor = {
-    //       Booker: "Y",
-    //       MBO: "Y",
-    //       Salonbiz: "Y",
-    //       Phorest: "Y",
-    //       Boulevard: "Y",
-    //     };
-    //   } else if (index < 50) {
-    //     d.pillar = "pillar5";
-    //     d.theme = "theme2";
-    //     d.competitor = {
-    //       Booker: "Y",
-    //       MBO: "Y",
-    //       Salonbiz: "Y",
-    //       Phorest: "Y",
-    //       Boulevard: "Y",
-    //     };
-    //   } else {
-    //     d.pillar = "pillar6";
-    //     d.theme = "theme1";
-    //     d.competitor = {
-    //       Booker: "Y",
-    //       MBO: "Y",
-    //       Salonbiz: "Y",
-    //       Phorest: "Y",
-    //       Boulevard: "Y",
-    //     };
-    //   }
-    // });
-    // setCountryOption(countryList);
-    // setDefaultData(Data);
-    // setFecthing(false);
   }, []);
 
   useEffect(() => {
@@ -268,23 +192,48 @@ const List = () => {
     }
   }, [filter.vertical, filter.country]);
 
-  const BusinessImpactFilter = (value, DataList) => {
+  const BusinessImpactFilter = ({ business_benefits, smallBiz }, DataList) => {
     let searchData = [];
-    let searchValueText = value;
-    searchValueText = searchValueText.replace(
-      /[-[\]{}()*+?.,\\^$|#\s]/g,
-      "\\$&"
-    );
-    const regex = new RegExp(`${searchValueText}`, "ig");
-    context.searchString = searchValueText;
-    DataList.forEach((data) => {
-      const searchObj = {
-        business_benefits: data.business_benefits,
-      };
-      if (Object.values(searchObj).join().match(regex)) {
-        searchData.push(data);
-      }
-    });
+    if (business_benefits && !smallBiz) {
+      let searchValueText = business_benefits;
+      searchValueText = searchValueText.replace(
+        /[-[\]{}()*+?.,\\^$|#\s]/g,
+        "\\$&"
+      );
+      const regex = new RegExp(`${searchValueText}`, "ig");
+      context.searchString = searchValueText;
+      DataList.forEach((data) => {
+        const searchObj = {
+          business_benefits: data.business_benefits,
+        };
+        if (Object.values(searchObj).join().match(regex)) {
+          searchData.push(data);
+        }
+      });
+    } else if (!business_benefits && smallBiz) {
+      DataList.forEach((data) => {
+        if (data.small_biz) {
+          searchData.push(data);
+        }
+      });
+    } else if (business_benefits && smallBiz) {
+      let searchValueText = business_benefits;
+      searchValueText = searchValueText.replace(
+        /[-[\]{}()*+?.,\\^$|#\s]/g,
+        "\\$&"
+      );
+      const regex = new RegExp(`${searchValueText}`, "ig");
+      context.searchString = searchValueText;
+      DataList.forEach((data) => {
+        const searchObj = {
+          business_benefits: data.business_benefits,
+        };
+        if (Object.values(searchObj).join().match(regex) && data.small_biz) {
+          searchData.push(data);
+        }
+      });
+    }
+
     return searchData;
   };
 
@@ -397,7 +346,7 @@ const List = () => {
       }
 
       if (filter.area && !filter.vertical) {
-        if (filter.area.toLowerCase() === d.area.toLowerCase()) {
+        if (d.business_area.includes(filter.area)) {
           DataList.add(d);
         }
       } else if (!filter.area && filter.multipleVertical.length > 1) {
@@ -405,6 +354,17 @@ const List = () => {
           return d.vertical.includes(value);
         });
         if (!checkdata.includes(false)) {
+          DataList.add(d);
+        }
+      } else if (filter.area && filter.multipleVertical.length > 1) {
+        const checkdata = filter.multipleVertical.map((value, index) => {
+          return d.vertical.includes(value);
+        });
+
+        if (
+          d.business_area.includes(filter.area) &&
+          !checkdata.includes(false)
+        ) {
           DataList.add(d);
         }
       } else {
@@ -416,8 +376,8 @@ const List = () => {
       DataList = MultipleCompetitorCompare(filter, DataList);
     }
 
-    if (filter.business_benefits) {
-      DataList = BusinessImpactFilter(filter.business_benefits, DataList);
+    if (filter.business_benefits || filter.smallBiz) {
+      DataList = BusinessImpactFilter(filter, DataList);
     }
 
     if (filter.pillar.length || filter.theme) {
@@ -441,6 +401,7 @@ const List = () => {
     filter.business_benefits,
     filter.pillar.length,
     filter.theme,
+    filter.smallBiz,
   ]);
 
   const changePageSize = (size) => {
@@ -678,9 +639,7 @@ const List = () => {
       flex: 1,
       field: value,
       minWidth: 100,
-      hide: !(
-        filter.competitor.includes(value) && filter.competitor.length
-      ),
+      hide: !(filter.competitor.includes(value) && filter.competitor.length),
     });
   });
 
