@@ -12,10 +12,11 @@ const UserFilterComponent = ({
 }) => {
   const [verticalFilter, setVerticalFilter] = useState("");
   const [multipleVerticalFilter, setMultipleVerticalFilter] = useState([]);
+  const [multipleRegionFilter, setMultipleRegionFilter] = useState([]);
   const [regionFilter, setRegionFilter] = useState("");
   const [competitorFilter, setCompetitorFilter] = useState([]);
-  const [areaFilter, setAreaFilter] = useState("");
-  const [businessFilter, setBusinessFilter] = useState("");
+  const [areaFilter, setAreaFilter] = useState([]);
+  const [businessFilter, setBusinessFilter] = useState([]);
   const [pillarFilter, setPillarFilter] = useState([]);
   const [themeFilter, setThemeFilter] = useState("");
   const [dependentThemeFilter, setDependentThemeFilter] = useState([]);
@@ -24,13 +25,15 @@ const UserFilterComponent = ({
   const [scrollOpen, setScrollOpen] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [steps, setSteps] = useState(false);
+
   const applyFilter = () => {
     handleFilterChange({
       vertical: verticalFilter,
       country: regionFilter,
       multipleVertical: multipleVerticalFilter,
       competitor: competitorFilter,
-      area: areaFilter,
+      multipleRegion: multipleRegionFilter,
+      business_area: areaFilter,
       business_benefits: businessFilter,
       pillar: pillarFilter,
       theme: themeFilter,
@@ -97,8 +100,9 @@ const UserFilterComponent = ({
       vertical: verticalFilter,
       country: regionFilter,
       multipleVertical: multipleVerticalFilter,
+      multipleRegion: multipleRegionFilter,
       competitor: competitorFilter,
-      area: areaFilter,
+      business_area: areaFilter,
       business_benefits: businessFilter,
       pillar: pillarFilter,
       theme: themeFilter,
@@ -120,8 +124,9 @@ const UserFilterComponent = ({
     setRegionFilter("");
     setCompetitorFilter([]);
     setMultipleVerticalFilter([]);
-    setAreaFilter("");
-    setBusinessFilter("");
+    setMultipleRegionFilter([]);
+    setAreaFilter([]);
+    setBusinessFilter([]);
     setPillarFilter([]);
     setThemeFilter("");
     setSmallBiz(false);
@@ -131,14 +136,25 @@ const UserFilterComponent = ({
     handleFilterChange(filterObj);
   };
 
-  //testing data filters api alternative
-  const Competitor = ["Booker", "MBO", "Salonbiz", "Phorest", "Boulevard"];
-
   const BusinessBenefits = [
     "Streamline operations",
     "unify the business",
     "Grow the business",
   ];
+
+  const multipleSelectUI = (spanButton, state, value, Filter) => {
+    if (spanButton.classList.value.includes("buttonClass-active")) {
+      spanButton.classList.remove("buttonClass-active");
+      const index = state.indexOf(value);
+      if (index > -1) {
+        state.splice(index, 1);
+        Filter(Array.from(new Set(state)));
+      }
+    } else {
+      spanButton.classList.add("buttonClass-active");
+      Filter(Array.from(new Set([...state, value])));
+    }
+  };
 
   const onChange = (index, value, Filter) => {
     const firstvalue = index.split("_");
@@ -147,19 +163,7 @@ const UserFilterComponent = ({
     const spanButtonAll = document.querySelectorAll(`.${firstvalue[0]}`);
 
     if (firstvalue[0] == "Competitor") {
-      if (spanButton.classList.value.includes("buttonClass-active")) {
-        spanButton.classList.remove("buttonClass-active");
-
-        let newCompetitorFilter = competitorFilter;
-        const index = newCompetitorFilter.indexOf(value);
-        if (index > -1) {
-          newCompetitorFilter.splice(index, 1);
-          Filter(newCompetitorFilter);
-        }
-      } else {
-        spanButton.classList.add("buttonClass-active");
-        Filter(Array.from(new Set([...competitorFilter, value])));
-      }
+      multipleSelectUI(spanButton, competitorFilter, value, Filter);
     } else if (firstvalue[0] == "verticalOption") {
       if (spanButton.classList.value.includes("buttonClass-active")) {
         spanButton.classList.remove("buttonClass-active");
@@ -182,18 +186,30 @@ const UserFilterComponent = ({
       }
     } else if (firstvalue[0] == "Pillar") {
       const [destructurePillarData] = value;
+      multipleSelectUI(spanButton, pillarFilter, destructurePillarData, Filter);
+    } else if (firstvalue[0] == "Business") {
+      multipleSelectUI(spanButton, businessFilter, value, Filter);
+    } else if (firstvalue[0] == "Area") {
+      multipleSelectUI(spanButton, areaFilter, value, Filter);
+    } else if (firstvalue[0] == "countryOption") {
       if (spanButton.classList.value.includes("buttonClass-active")) {
         spanButton.classList.remove("buttonClass-active");
-
-        let newPillarFilter = pillarFilter;
-        const index = newPillarFilter.indexOf(destructurePillarData);
+        Filter("");
+        let multipleFilter = multipleRegionFilter;
+        const index = multipleFilter.indexOf(value);
         if (index > -1) {
-          newPillarFilter.splice(index, 1);
-          Filter(Array.from(new Set(newPillarFilter)));
+          multipleFilter.splice(index, 1);
+          setMultipleRegionFilter(multipleFilter);
+          if (multipleRegionFilter.length === 1) {
+            Filter(multipleRegionFilter[0]);
+          }
         }
       } else {
         spanButton.classList.add("buttonClass-active");
-        Filter(Array.from(new Set([...pillarFilter, destructurePillarData])));
+        Filter(value);
+        setMultipleRegionFilter(
+          Array.from(new Set([...multipleRegionFilter, value]))
+        );
       }
     } else {
       if (spanButton.classList.value.includes("buttonClass-active")) {
@@ -365,7 +381,7 @@ const UserFilterComponent = ({
             </Row>
             <Row>
               <Col md={12}>
-                <h6>
+                <h6 className="mb-3">
                   <b>Available for small business</b>
                 </h6>
                 <div className="d-flex justify-content-center">

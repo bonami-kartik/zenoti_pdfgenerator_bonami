@@ -67,11 +67,12 @@ const List = () => {
     vertical: "",
     country: "",
     competitor: [],
-    area: "",
-    business_benefits: "",
+    business_benefits: [],
     multipleVertical: [],
+    multipleRegion: [],
     pillar: [],
     theme: "",
+    business_area: [],
     uniqueZenoti: false,
     smallBiz: false,
   });
@@ -101,6 +102,7 @@ const List = () => {
           areaList.push(d.area);
         }
         setAreaFilterOption(areaList);
+
         //testing data inserting in template list api
         if (index < 100) {
           d.brand_pillars = ["grow"];
@@ -148,10 +150,13 @@ const List = () => {
         const searchObj = {
           title: data.title,
           area: data.area,
+          brand_pillars: data.brand_pillars,
+          business_area: data.business_area,
           business_benefits: data.business_benefits,
           country: data.country,
           description: data.description,
           differentiator: data.differentiator ? "Yes" : "No",
+          small_biz: data.small_biz ? "Yes" : "No",
           vertical: data.vertical.join(),
           note: data.note || "",
         };
@@ -182,11 +187,11 @@ const List = () => {
           filterType: "text",
           type: "contains",
         },
-        country: {
-          filter: filter.country,
-          filterType: "text",
-          type: "equals",
-        },
+        // country: {
+        //   filter: filter.country,
+        //   filterType: "text",
+        //   type: "equals",
+        // },
       });
       grid.api.deselectAll();
     }
@@ -194,47 +199,69 @@ const List = () => {
 
   const BusinessImpactFilter = ({ business_benefits, smallBiz }, DataList) => {
     let searchData = [];
-    if (business_benefits && !smallBiz) {
-      let searchValueText = business_benefits;
-      searchValueText = searchValueText.replace(
-        /[-[\]{}()*+?.,\\^$|#\s]/g,
-        "\\$&"
-      );
-      const regex = new RegExp(`${searchValueText}`, "ig");
-      context.searchString = searchValueText;
+    if (business_benefits.length && !smallBiz) {
       DataList.forEach((data) => {
-        const searchObj = {
-          business_benefits: data.business_benefits,
-        };
-        if (Object.values(searchObj).join().match(regex)) {
+        const checkdata = business_benefits.map((benefit) => {
+          let searchValueText = benefit;
+          searchValueText = searchValueText.replace(
+            /[-[\]{}()*+?.,\\^$|#\s]/g,
+            "\\$&"
+          );
+          const regex = new RegExp(`${searchValueText}`, "ig");
+          context.searchString = searchValueText;
+
+          const searchObj = {
+            business_benefits: data.business_benefits,
+          };
+          return Object.values(searchObj).join().match(regex) ? true : false;
+        });
+
+        if (!checkdata.includes(false)) {
           searchData.push(data);
         }
       });
-    } else if (!business_benefits && smallBiz) {
+    } else if (!business_benefits.length && smallBiz) {
       DataList.forEach((data) => {
         if (data.small_biz) {
           searchData.push(data);
         }
       });
-    } else if (business_benefits && smallBiz) {
-      let searchValueText = business_benefits;
-      searchValueText = searchValueText.replace(
-        /[-[\]{}()*+?.,\\^$|#\s]/g,
-        "\\$&"
-      );
-      const regex = new RegExp(`${searchValueText}`, "ig");
-      context.searchString = searchValueText;
+    } else if (business_benefits.length && smallBiz) {
       DataList.forEach((data) => {
-        const searchObj = {
-          business_benefits: data.business_benefits,
-        };
-        if (Object.values(searchObj).join().match(regex) && data.small_biz) {
+        const checkdata = business_benefits.map((benefit) => {
+          let searchValueText = benefit;
+          searchValueText = searchValueText.replace(
+            /[-[\]{}()*+?.,\\^$|#\s]/g,
+            "\\$&"
+          );
+          const regex = new RegExp(`${searchValueText}`, "ig");
+          context.searchString = searchValueText;
+
+          const searchObj = {
+            business_benefits: data.business_benefits,
+          };
+          return Object.values(searchObj).join().match(regex) && data.small_biz
+            ? true
+            : false;
+        });
+
+        if (!checkdata.includes(false)) {
           searchData.push(data);
         }
       });
     }
 
     return searchData;
+  };
+
+  const MultipleRegionFilter = (value, DataList) => {
+    let filterData = new Set();
+    DataList.forEach((data) => {
+       if(value.multipleRegion.includes(data.country)){
+        filterData.add(data);
+       }
+    });
+    return filterData;
   };
 
   const MultipleCompetitorCompare = (value, DataList) => {
@@ -283,26 +310,17 @@ const List = () => {
           }
         } else if (pillar.length && !theme) {
           let dataChecked = pillar.map((pillar_data) => {
-            if (data.brand_pillars.includes(pillar_data)) {
-              return true;
-            } else {
-              return false;
-            }
+            return data.brand_pillars.includes(pillar_data);
           });
-          console.log(dataChecked);
           if (!dataChecked.includes(false)) {
             pillarAndthemeList.add(data);
           }
         } else if (pillar.length && theme) {
           let dataChecked = pillar.map((pillar_data) => {
-            if (
+            return (
               data.brand_pillars.includes(pillar_data) &&
               data.themes.includes(theme)
-            ) {
-              return true;
-            } else {
-              return false;
-            }
+            );
           });
 
           if (!dataChecked.includes(false)) {
@@ -344,25 +362,37 @@ const List = () => {
         }
       }
 
-      if (filter.area && !filter.vertical) {
-        if (d.business_area.includes(filter.area)) {
+      if (filter.business_area.length && !filter.vertical) {
+        const checkdata = filter.business_area.map((area) => {
+          return d.business_area.includes(area);
+        });
+        if (!checkdata.includes(false)) {
           DataList.add(d);
         }
-      } else if (!filter.area && filter.multipleVertical.length > 1) {
+      } else if (
+        !filter.business_area.length &&
+        filter.multipleVertical.length > 1
+      ) {
         const checkdata = filter.multipleVertical.map((value, index) => {
           return d.vertical.includes(value);
         });
         if (!checkdata.includes(false)) {
           DataList.add(d);
         }
-      } else if (filter.area && filter.multipleVertical.length > 1) {
-        const checkdata = filter.multipleVertical.map((value, index) => {
+      } else if (
+        filter.business_area.length &&
+        filter.multipleVertical.length > 1
+      ) {
+        const checkdata_vertical = filter.multipleVertical.map((value) => {
           return d.vertical.includes(value);
+        });
+        const checkdata_area = filter.business_area.map((area) => {
+          return d.business_area.includes(area);
         });
 
         if (
-          d.business_area.includes(filter.area) &&
-          !checkdata.includes(false)
+          !checkdata_vertical.includes(false) &&
+          !checkdata_area.includes(false)
         ) {
           DataList.add(d);
         }
@@ -371,11 +401,15 @@ const List = () => {
       }
     });
 
+    if (filter.multipleRegion.length) {
+      DataList = MultipleRegionFilter(filter, DataList);
+    }
+
     if (filter.competitor.length || filter.uniqueZenoti) {
       DataList = MultipleCompetitorCompare(filter, DataList);
     }
 
-    if (filter.business_benefits || filter.smallBiz) {
+    if (filter.business_benefits.length || filter.smallBiz) {
       DataList = BusinessImpactFilter(filter, DataList);
     }
 
@@ -395,9 +429,9 @@ const List = () => {
     filter.vertical,
     filter.country,
     filter.competitor.length,
-    filter.area,
+    filter.business_area.length,
     filter.uniqueZenoti,
-    filter.business_benefits,
+    filter.business_benefits.length,
     filter.pillar.length,
     filter.theme,
     filter.smallBiz,
