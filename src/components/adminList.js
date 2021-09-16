@@ -13,6 +13,9 @@ import {
   getAreaList,
   getVerticalList,
   getRegionList,
+  getBusinessAreaList,
+  getCompetitorList,
+  getPillarList,
 } from "../api/api";
 import AdminModal from "./adminModal";
 import FilterComponent from "./filterComponent";
@@ -24,6 +27,7 @@ import SearchComponent from "./searchComponent";
 import { SearchContext } from "./searchContext";
 import AreaFilter from "./AreaFilter";
 import { listFilterIcon } from "../utils/helper";
+import UserFilterComponent from "./userfilterComponent";
 
 const pageSizes = [10, 20, 30, 40, 50, 100, 500];
 
@@ -32,6 +36,9 @@ const AdminList = () => {
   const [verticalOption, setVerticalOptions] = useState([]);
   const [areaOption, setAreaOptions] = useState([]);
   const [regionOption, setRegionOptions] = useState([]);
+  const [competitorOption, setCompetitorOptions] = useState([]);
+  const [pillarOption, setPillarOptions] = useState([]);
+  const [businessAreaOption, setBusinessAreaOptions] = useState([]);
 
   useEffect(() => {
     getVerticalList().then((res) => {
@@ -45,6 +52,18 @@ const AdminList = () => {
     getRegionList().then((res) => {
       let list = res.map((r) => ({ value: r, label: r }));
       setRegionOptions(list);
+    });
+    getCompetitorList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setCompetitorOptions(list);
+    });
+    getPillarList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setPillarOptions(list);
+    });
+    getBusinessAreaList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setBusinessAreaOptions(list);
     });
   }, []);
 
@@ -66,6 +85,15 @@ const AdminList = () => {
   const [filter, setFilter] = useState({
     vertical: "",
     country: "",
+    competitor: [],
+    business_benefits: [],
+    multipleVertical: [],
+    multipleRegion: [],
+    pillar: [],
+    theme: "",
+    business_area: [],
+    uniqueZenoti: false,
+    smallBiz: false,
   });
 
   const ActionRenderer = (props) => {
@@ -86,6 +114,22 @@ const AdminList = () => {
   };
 
   const columnDefs = [
+    {
+      headerName: "Theme",
+      field: "themes",
+      flex: 2,
+      minWidth: 120,
+      tooltipField: "theme",
+      tooltipComponentParams: { width: 100 },
+    },
+    {
+      headerName: "Pillar",
+      field: "brand_pillars",
+      flex: 2,
+      minWidth: 120,
+      tooltipField: "pillar",
+      tooltipComponentParams: { width: 100 },
+    },
     {
       headerName: "Feature",
       field: "title",
@@ -129,6 +173,7 @@ const AdminList = () => {
         return val1 ? -1 : 1;
       },
       cellRenderer: "highlightCellRenderer",
+      hide: true,
     },
     {
       headerName: "Business Impact",
@@ -144,6 +189,7 @@ const AdminList = () => {
         return val1.trim() < val2.trim() ? -1 : 1;
       },
       cellRenderer: "highlightCellRenderer",
+      hide: true,
     },
     {
       headerName: "Area",
@@ -161,6 +207,7 @@ const AdminList = () => {
       icons: {
         menu: listFilterIcon(),
       },
+      hide: true,
     },
     {
       headerName: "Vertical",
@@ -173,6 +220,7 @@ const AdminList = () => {
         caseSensitive: true,
       },
       cellRenderer: "highlightCellRenderer",
+      hide: true,
     },
     {
       headerName: "Region",
@@ -180,6 +228,7 @@ const AdminList = () => {
       flex: 1,
       minWidth: 100,
       cellRenderer: "highlightCellRenderer",
+      hide: true,
     },
     {
       headerName: "Action",
@@ -191,6 +240,16 @@ const AdminList = () => {
       minWidth: 100,
     },
   ];
+
+  competitorOption.forEach(({ value }) => {
+    columnDefs.push({
+      headerName: value,
+      flex: 1,
+      field: value,
+      minWidth: 100,
+      hide: !(filter.competitor.includes(value) && filter.competitor.length),
+    });
+  });
 
   useEffect(() => {
     setFecthing(true);
@@ -209,23 +268,47 @@ const AdminList = () => {
     getAdminList().then((res) => {
       let countryList = [];
       let areaList = [];
-      res.forEach((d) => {
+      res.forEach((d, index) => {
         if (d.country && !countryList.includes(d.country)) {
           countryList.push(d.country);
         }
         if (d.area && !areaList.includes(d.area)) {
           areaList.push(d.area);
         }
+        setAreaFilterOption(areaList);
+
+        //testing data inserting in template list api
+        if (index < 100) {
+          d.brand_pillars = ["grow"];
+          d.themes = ["theme6"];
+          d.competitor = ["booker", "mbo"];
+        } else if (index < 200) {
+          d.brand_pillars = ["elevate cx", "unify", "grow"];
+          d.themes = ["theme1"];
+          d.competitor = ["salonbiz", "mbo"];
+        } else if (index < 300) {
+          d.brand_pillars = ["unify", "automate", "grow"];
+          d.themes = ["theme4"];
+          d.competitor = ["booker", "mbo"];
+        } else if (index < 400) {
+          d.brand_pillars = ["elevate cx"];
+          d.themes = ["theme3"];
+          d.competitor = ["booker", "mbo"];
+        } else if (index < 500) {
+          d.brand_pillars = ["elevate cx", "grow"];
+          d.themes = ["theme2"];
+          d.competitor = ["booker", "salonbiz"];
+        } else {
+          d.brand_pillars = ["automate", "grow"];
+          d.themes = ["theme5"];
+          d.competitor = ["booker", "mbo"];
+        }
       });
-      setAreaFilterOption(areaList);
       setCountryOption(countryList);
-      if (filter.country && !countryList.includes(filter.country)) {
-        setFilter({ ...filter, country: "" });
-      }
       setDefaultData(res);
       setFecthing(false);
     });
-  }, [filter]);
+  }, []);
 
   useEffect(() => {
     let searchData = [];
@@ -241,10 +324,13 @@ const AdminList = () => {
         const searchObj = {
           title: data.title,
           area: data.area,
+          brand_pillars: data.brand_pillars,
+          business_area: data.business_area,
           business_benefits: data.business_benefits,
           country: data.country,
           description: data.description,
           differentiator: data.differentiator ? "Yes" : "No",
+          small_biz: data.small_biz ? "Yes" : "No",
           vertical: data.vertical.join(),
           note: data.note || "",
         };
@@ -255,12 +341,11 @@ const AdminList = () => {
     } else {
       searchData = [...defaultData];
     }
-    context.searchString = searchValue;
     setTableData(searchData);
     setTimeout(() => {
       if (grid) grid.api.refreshCells({ columns: ["note"], force: true });
     }, 1000);
-  }, [searchValue, defaultData]);
+  }, [searchValue]);
 
   useEffect(() => {
     if (grid) {
@@ -271,42 +356,254 @@ const AdminList = () => {
           filterType: "text",
           type: "contains",
         },
-        country: {
-          filter: filter.country,
-          filterType: "text",
-          type: "equals",
-        },
+        // country: {
+        //   filter: filter.country,
+        //   filterType: "text",
+        //   type: "equals",
+        // },
       });
     }
   }, [filter.vertical, filter.country]);
 
-  useEffect(() => {
-    let areaList = new Set();
+  const BusinessImpactFilter = ({ business_benefits, smallBiz }, DataList) => {
+    let searchData = [];
+    if (business_benefits.length && !smallBiz) {
+      DataList.forEach((data) => {
+        const checkdata = business_benefits.map((benefit) => {
+          let searchValueText = benefit;
+          searchValueText = searchValueText.replace(
+            /[-[\]{}()*+?.,\\^$|#\s]/g,
+            "\\$&"
+          );
+          const regex = new RegExp(`${searchValueText}`, "ig");
+          context.searchString = searchValueText;
 
-    defaultData.forEach(d => {
-      if (!filter.country && !filter.vertical){
-        areaList.add(d.area);
-      } else if ((!filter.vertical) && filter.country) {
-        if (d.country.toLowerCase()===filter.country.toLowerCase()) {
-          areaList.add(d.area);
+          const searchObj = {
+            business_benefits: data.business_benefits,
+          };
+          return Object.values(searchObj).join().match(regex) ? true : false;
+        });
+
+        if (!checkdata.includes(false)) {
+          searchData.push(data);
         }
-      } else if ((!filter.country) && filter.vertical) {
-        if (d.vertical.some(e => e.toLowerCase()===filter.vertical.toLowerCase())) {
-          areaList.add(d.area);
+      });
+    } else if (!business_benefits.length && smallBiz) {
+      DataList.forEach((data) => {
+        if (data.small_biz) {
+          searchData.push(data);
         }
-      } else {
-        if ((d.country.toLowerCase()===filter.country.toLowerCase()) &&
-                (d.vertical.some(e => e.toLowerCase()===filter.vertical.toLowerCase()))) {
-          areaList.add(d.area);
+      });
+    } else if (business_benefits.length && smallBiz) {
+      DataList.forEach((data) => {
+        const checkdata = business_benefits.map((benefit) => {
+          let searchValueText = benefit;
+          searchValueText = searchValueText.replace(
+            /[-[\]{}()*+?.,\\^$|#\s]/g,
+            "\\$&"
+          );
+          const regex = new RegExp(`${searchValueText}`, "ig");
+          context.searchString = searchValueText;
+
+          const searchObj = {
+            business_benefits: data.business_benefits,
+          };
+          return Object.values(searchObj).join().match(regex) && data.small_biz
+            ? true
+            : false;
+        });
+
+        if (!checkdata.includes(false)) {
+          searchData.push(data);
+        }
+      });
+    }
+
+    return searchData;
+  };
+
+  const MultipleRegionFilter = (value, DataList) => {
+    let filterData = new Set();
+    DataList.forEach((data) => {
+      if (value.multipleRegion.includes(data.country)) {
+        filterData.add(data);
+      }
+    });
+    return filterData;
+  };
+
+  const MultipleCompetitorCompare = (value, DataList) => {
+    let filterData = new Set();
+    DataList.forEach((data) => {
+      if (value.competitor.length && !value.uniqueZenoti) {
+        value.competitor.forEach((val) => {
+          if (data.competitor.includes(val)) {
+            data[val] = "✔";
+          } else {
+            data[val] = "✗";
+          }
+        });
+
+        filterData.add(data);
+      } else if (value.competitor.length && value.uniqueZenoti) {
+        const checkingvalue = value.competitor.map((val) => {
+          if (data.differentiator === true && !data.competitor.includes(val)) {
+            data[val] = "✗";
+            return true;
+          } else {
+            data[val] = "✔";
+            return false;
+          }
+        });
+        if (!checkingvalue.includes(false)) {
+          filterData.add(data);
+        }
+      } else if (value.competitor.length === 0 && value.uniqueZenoti) {
+        if (data.differentiator === true) {
+          filterData.add(data);
         }
       }
     });
 
+    return filterData;
+  };
+
+  const PillarAndTheme = ({ pillar, theme }, DataList) => {
+    let pillarAndthemeList = new Set();
+    DataList.forEach((data) => {
+      if (data.brand_pillars || data.themes) {
+        if (!pillar.length && theme) {
+          if (data.themes.includes(theme)) {
+            pillarAndthemeList.add(data);
+          }
+        } else if (pillar.length && !theme) {
+          let dataChecked = pillar.map((pillar_data) => {
+            return data.brand_pillars.includes(pillar_data);
+          });
+          if (!dataChecked.includes(false)) {
+            pillarAndthemeList.add(data);
+          }
+        } else if (pillar.length && theme) {
+          let dataChecked = pillar.map((pillar_data) => {
+            return (
+              data.brand_pillars.includes(pillar_data) &&
+              data.themes.includes(theme)
+            );
+          });
+
+          if (!dataChecked.includes(false)) {
+            pillarAndthemeList.add(data);
+          }
+        }
+      }
+    });
+    return pillarAndthemeList;
+  };
+
+  useEffect(() => {
+    let areaList = new Set();
+    let DataList = new Set();
+
+    defaultData.forEach((d) => {
+      if (!filter.country && !filter.vertical && !filter.competitor) {
+        areaList.add(d.area);
+      } else if (!filter.vertical && filter.country) {
+        if (d.country.toLowerCase() === filter.country.toLowerCase()) {
+          areaList.add(d.area);
+        }
+      } else if (!filter.country && filter.vertical) {
+        if (
+          d.vertical.some(
+            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+          )
+        ) {
+          areaList.add(d.area);
+        }
+      } else {
+        if (
+          d.country.toLowerCase() === filter.country.toLowerCase() &&
+          d.vertical.some(
+            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+          )
+        ) {
+          areaList.add(d.area);
+        }
+      }
+
+      if (filter.business_area.length && !filter.vertical) {
+        const checkdata = filter.business_area.map((area) => {
+          return d.business_area.includes(area);
+        });
+        if (!checkdata.includes(false)) {
+          DataList.add(d);
+        }
+      } else if (
+        !filter.business_area.length &&
+        filter.multipleVertical.length > 1
+      ) {
+        const checkdata = filter.multipleVertical.map((value, index) => {
+          return d.vertical.includes(value);
+        });
+        if (!checkdata.includes(false)) {
+          DataList.add(d);
+        }
+      } else if (
+        filter.business_area.length &&
+        filter.multipleVertical.length > 1
+      ) {
+        const checkdata_vertical = filter.multipleVertical.map((value) => {
+          return d.vertical.includes(value);
+        });
+        const checkdata_area = filter.business_area.map((area) => {
+          return d.business_area.includes(area);
+        });
+
+        if (
+          !checkdata_vertical.includes(false) &&
+          !checkdata_area.includes(false)
+        ) {
+          DataList.add(d);
+        }
+      } else {
+        DataList.add(d);
+      }
+    });
+
+    if (filter.multipleRegion.length) {
+      DataList = MultipleRegionFilter(filter, DataList);
+    }
+
+    if (filter.competitor.length || filter.uniqueZenoti) {
+      DataList = MultipleCompetitorCompare(filter, DataList);
+    }
+
+    if (filter.business_benefits.length || filter.smallBiz) {
+      DataList = BusinessImpactFilter(filter, DataList);
+    }
+
+    if (filter.pillar.length || filter.theme) {
+      DataList = PillarAndTheme(filter, DataList);
+    }
+
+    setTableData(Array.from(DataList));
+
     setAreaFilterOption(Array.from(areaList));
     if (grid) {
-      grid.api.destroyFilter('area');
+      grid.api.destroyFilter("area");
     }
-  }, [grid, defaultData, filter.vertical, filter.country]);
+  }, [
+    grid,
+    defaultData,
+    filter.vertical,
+    filter.country,
+    filter.competitor.length,
+    filter.business_area.length,
+    filter.uniqueZenoti,
+    filter.business_benefits.length,
+    filter.pillar.length,
+    filter.theme,
+    filter.smallBiz,
+  ]);
 
   const onGridReady = (grid) => {
     setGrid(grid);
@@ -345,6 +642,7 @@ const AdminList = () => {
   };
 
   const saveProduct = (data) => {
+    console.log(data);
     setAddProductFlag(true);
     const isEdit = selectedRow.data && selectedRow.data.id;
     let apiCall = null;
@@ -355,8 +653,14 @@ const AdminList = () => {
       const newData = { ...rest };
       newData.countries = country;
       apiCall = addMulitpleTemplate(newData);
+    } else if (data.competitors.length > 1) {
+      const { competitors, ...rest } = data;
+      const newData = { ...rest };
+      newData.competitors = competitors;
+      apiCall = addMulitpleTemplate(newData);
     } else {
       data.country = data.country[0];
+      data.competitors = data.competitors[0];
       apiCall = addTemplate(data);
     }
     apiCall
@@ -406,20 +710,23 @@ const AdminList = () => {
       });
   };
 
+  const modifyPillar = pillarOption.map((c) => {
+    let [v] = Object.keys(c.value);
+    return { value: v, label: v };
+  });
+
   return (
     <>
       <Row className="my-3 align-items-center">
-        <Col lg={7} md={12} className="mt-2">
-          <FilterComponent
-            filter={filter}
-            handleFilterChange={(data) => {
-              setFilter(data);
+        <Col lg={6} md={6} sm={12}>
+          <SearchComponent
+            searchValue={searchValue}
+            onSearchChange={(value) => {
+              setSearchValue(value);
             }}
-            countryOption={countryOption}
-            verticalOption={verticalOption}
           />
         </Col>
-        <Col lg={5} md={12} className="p-2">
+        <Col lg={6} md={6} sm={12} className="p-2">
           <div className="d-flex flex-wrap justify-content-end align-items-center my-3">
             <Button
               variant="primary"
@@ -439,7 +746,8 @@ const AdminList = () => {
             </Button>
           </div>
         </Col>
-        <Col sm={12}>
+
+        {/* <Col sm={12}>
           {" "}
           <Row>
             <Col lg={7} md={6} sm={12}>
@@ -479,10 +787,23 @@ const AdminList = () => {
               </Form>
             </Col>
           </Row>
-        </Col>
+        </Col> */}
       </Row>
       <Row>
-        <Col sm={12}>
+        <Col sm={12} lg={3} md={12}>
+          <UserFilterComponent
+            filter={filter}
+            handleFilterChange={(data) => {
+              setFilter(data);
+            }}
+            countryOption={countryOption}
+            verticalOption={verticalOption}
+            competitorOption={competitorOption}
+            pillarOption={pillarOption}
+            businessAreaOption={businessAreaOption}
+          />
+        </Col>
+        <Col sm={12} lg={9} md={12}>
           <SearchContext.Provider value={{ searchString: searchValue }}>
             <Table
               columns={columnDefs}
@@ -511,6 +832,9 @@ const AdminList = () => {
         verticalOption={verticalOption}
         areaOption={areaOption}
         regionOption={regionOption}
+        competitorOption={competitorOption}
+        pillarOption={modifyPillar}
+        businessAreaOption={businessAreaOption}
         toggleAdminModal={toggleAdminModal}
         toggleDeleteAdminModal={toggleDeleteAdminModal}
         saveProduct={saveProduct}
@@ -524,6 +848,9 @@ const AdminList = () => {
         verticalOption={verticalOption}
         areaOption={areaOption}
         regionOption={regionOption}
+        competitorOption={competitorOption}
+        pillarOption={pillarOption}
+        businessAreaOption={businessAreaOption}
       />
     </>
   );
