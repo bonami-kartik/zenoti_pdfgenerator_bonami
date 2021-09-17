@@ -8,6 +8,7 @@ import {
   getPillarList,
   getVerticalList,
   logVisitorEvent,
+  getRegionList,
 } from "../api/api";
 import NoteModal from "./noteModal";
 import PdfModal from "./pdfModal";
@@ -19,7 +20,7 @@ import { SearchContext } from "./searchContext";
 import AreaFilter from "./AreaFilter";
 import { listFilterIcon } from "../utils/helper";
 import publicIp from "public-ip";
-import UserFilterComponent from "./userfilterComponent";
+import FilterComponent from "./filterComponent";
 
 const pageSizes = [10, 20, 30, 40, 50, 100, 500];
 
@@ -46,6 +47,10 @@ const List = () => {
     getBusinessAreaList().then((res) => {
       let list = res.map((v) => ({ value: v, label: v }));
       setBusinessAreaOptions(list);
+    });
+    getRegionList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setCountryOption(list);
     });
   }, []);
 
@@ -92,16 +97,15 @@ const List = () => {
   const getTableData = useCallback(() => {
     setFecthing(true);
     getAdminList().then((res) => {
-      let countryList = [];
       let areaList = [];
       res.forEach((d, index) => {
-        if (d.country && !countryList.includes(d.country)) {
-          countryList.push(d.country);
-        }
-        if (d.area && !areaList.includes(d.area)) {
-          areaList.push(d.area);
-        }
-        setAreaFilterOption(areaList);
+        // if (d.country && !countryList.includes(d.country)) {
+        //   countryList.push(d.country);
+        // // }
+        // if (d.area && !areaList.includes(d.area)) {
+        //   areaList.push(d.area);
+        // }
+        // setAreaFilterOption(areaList);
 
         //testing data inserting in template list api
         if (index < 100) {
@@ -130,7 +134,7 @@ const List = () => {
           d.competitor = ["booker", "mbo"];
         }
       });
-      setCountryOption(countryList);
+      // setCountryOption(countryList);
       setDefaultData(res);
       setFecthing(false);
     });
@@ -257,9 +261,9 @@ const List = () => {
   const MultipleRegionFilter = (value, DataList) => {
     let filterData = new Set();
     DataList.forEach((data) => {
-       if(value.multipleRegion.includes(data.country)){
+      if (value.multipleRegion.includes(data.country)) {
         filterData.add(data);
-       }
+      }
     });
     return filterData;
   };
@@ -756,7 +760,7 @@ const List = () => {
       </Row>
       <Row>
         <Col sm={12} lg={3} md={12}>
-          <UserFilterComponent
+          <FilterComponent
             filter={filter}
             handleFilterChange={handleFilterValue}
             countryOption={countryOption}

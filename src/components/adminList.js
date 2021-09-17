@@ -27,7 +27,6 @@ import SearchComponent from "./searchComponent";
 import { SearchContext } from "./searchContext";
 import AreaFilter from "./AreaFilter";
 import { listFilterIcon } from "../utils/helper";
-import UserFilterComponent from "./userfilterComponent";
 
 const pageSizes = [10, 20, 30, 40, 50, 100, 500];
 
@@ -715,6 +714,15 @@ const AdminList = () => {
     return { value: v, label: v };
   });
 
+  let themeData = new Set();
+  pillarOption.forEach(({ value }) => {
+    value[Object.keys(value)].forEach((data) => {
+      themeData.add({ value: data, label: data });
+    });
+  });
+
+  const modifyThemeData = Array.from(themeData);
+
   return (
     <>
       <Row className="my-3 align-items-center">
@@ -791,7 +799,7 @@ const AdminList = () => {
       </Row>
       <Row>
         <Col sm={12} lg={3} md={12}>
-          <UserFilterComponent
+          <FilterComponent
             filter={filter}
             handleFilterChange={(data) => {
               setFilter(data);
@@ -834,6 +842,7 @@ const AdminList = () => {
         regionOption={regionOption}
         competitorOption={competitorOption}
         pillarOption={modifyPillar}
+        themeOption={modifyThemeData}
         businessAreaOption={businessAreaOption}
         toggleAdminModal={toggleAdminModal}
         toggleDeleteAdminModal={toggleDeleteAdminModal}

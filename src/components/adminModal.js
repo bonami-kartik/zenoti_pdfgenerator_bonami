@@ -23,6 +23,8 @@ const defaultData = {
   country: null,
   competitorOption: null,
   pillarOption: null,
+  businessAreaOption: null,
+  themeOption: null,
   differentiator: null,
   small_biz: null,
 };
@@ -34,6 +36,7 @@ const AdminModal = ({
   competitorOption,
   pillarOption,
   businessAreaOption,
+  themeOption,
   adminModal,
   deleteAdminModal,
   addProductFlag,
@@ -54,6 +57,8 @@ const AdminModal = ({
     let selectedCoutry = null;
     let selectedCompetitor = null;
     let selectedPillar = null;
+    let selectedBusinessArea = null;
+    let selectedThemes = null;
     if (selectedRow && selectedRow.data) {
       data = { ...selectedRow.data };
     } else {
@@ -61,6 +66,8 @@ const AdminModal = ({
       selectedCoutry = regionOption;
       selectedCompetitor = competitorOption;
       selectedPillar = pillarOption;
+      selectedBusinessArea = businessAreaOption;
+      selectedThemes = themeOption;
       data.differentiator = "yes";
       data.small_biz = "yes";
     }
@@ -82,9 +89,15 @@ const AdminModal = ({
       );
     }
     if (data.brand_pillars) {
-      selectedCompetitor = pillarOption.find(
-        (c) => c.value === data.brand_pillars
+      selectedPillar = pillarOption.find((c) => c.value === data.brand_pillars);
+    }
+    if (data.business_area) {
+      selectedBusinessArea = businessAreaOption.find(
+        (c) => c.value === data.business_area
       );
+    }
+    if (data.themes) {
+      selectedThemes = themeOption.find((c) => c.value === data.themes);
     }
     if (data.differentiator !== undefined && data.differentiator !== null) {
       data.differentiator = data.differentiator ? "yes" : "no";
@@ -102,6 +115,8 @@ const AdminModal = ({
       country: selectedCoutry,
       competitors: selectedCompetitor,
       brand_pillars: selectedPillar,
+      business_area: selectedBusinessArea,
+      themes: selectedThemes,
       differentiator: data.differentiator || null,
       small_biz: data.small_biz || null,
     });
@@ -117,6 +132,9 @@ const AdminModal = ({
         isEdit && newData.competitors ? newData.competitors.value : "";
       newData.brand_pillars =
         isEdit && newData.brand_pillars ? newData.brand_pillars : "";
+      newData.business_area =
+        isEdit && newData.business_area ? newData.business_area : "";
+      newData.themes = isEdit && newData.themes ? newData.themes : "";
     } else {
       newData.country = newData.country
         ? newData.country.map((c) => c.value)
@@ -129,6 +147,12 @@ const AdminModal = ({
       newData.brand_pillars = newData.brand_pillars
         ? newData.brand_pillars.map((c) => c.value)
         : [];
+
+      newData.business_area = newData.business_area
+        ? newData.business_area.map((c) => c.value)
+        : [];
+
+      newData.themes = newData.themes ? newData.themes.map((c) => c.value) : [];
     }
 
     if (newData.differentiator === "yes") {
@@ -277,9 +301,9 @@ const AdminModal = ({
                           value="no"
                           defaultChecked={watch("small_biz") === false}
                         />
-                        {errors.product_feature && (
+                        {errors.small_biz && (
                           <p className="form-error">
-                            {errors.product_feature.message}
+                            {errors.small_biz.message}
                           </p>
                         )}
                       </div>
@@ -578,44 +602,42 @@ const AdminModal = ({
                         ];
                       }
                       return (
-                        pillarOption.length && (
-                          <Select
-                            classNamePrefix="form-select"
-                            placeholder="Select Pillars"
-                            options={pillarList}
-                            isClearable
-                            isMulti={!isEdit}
-                            defaultValue={null}
-                            value={controllerProps.value}
-                            menuPlacement="auto"
-                            onChange={(value, { option }) => {
-                              if (option && option.value === "all") {
-                                control.setValue("brand_pillars", pillarOption);
-                              } else {
-                                control.setValue("brand_pillars", value);
-                              }
-                            }}
-                            isOptionDisabled={() => {
-                              return !isEdit && watch("brand_pillars")
-                                ? watch("brand_pillars").length >= 10
-                                : false;
-                            }}
-                            onMenuClose={() => {
-                              if (
-                                !isEdit &&
-                                Array.isArray(watch("brand_pillars")) &&
-                                watch("brand_pillars").length === 0
-                              ) {
-                                control.setValue("brand_pillars", null);
-                              }
-                            }}
-                          />
-                        )
+                        <Select
+                          classNamePrefix="form-select"
+                          placeholder="Select Pillars"
+                          options={pillarList}
+                          isClearable
+                          isMulti={!isEdit}
+                          defaultValue={null}
+                          value={controllerProps.value}
+                          menuPlacement="auto"
+                          onChange={(value, { option }) => {
+                            if (option && option.value === "all") {
+                              control.setValue("brand_pillars", pillarOption);
+                            } else {
+                              control.setValue("brand_pillars", value);
+                            }
+                          }}
+                          isOptionDisabled={() => {
+                            return !isEdit && watch("brand_pillars")
+                              ? watch("brand_pillars").length >= 10
+                              : false;
+                          }}
+                          onMenuClose={() => {
+                            if (
+                              !isEdit &&
+                              Array.isArray(watch("brand_pillars")) &&
+                              watch("brand_pillars").length === 0
+                            ) {
+                              control.setValue("brand_pillars", null);
+                            }
+                          }}
+                        />
                       );
                     }}
                   />
                   {!isEdit &&
-                    competitorOption.length > 10 &&
+                    pillarOption.length > 10 &&
                     watch("brand_pillars") && (
                       <p className="form-error text-muted">
                         {watch("brand_pillars").length >= 5
@@ -627,6 +649,164 @@ const AdminModal = ({
                     )}
                   {errors.brand_pillars && (
                     <p className="form-error">{errors.brand_pillars.message}</p>
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6} md={12}>
+                <FormGroup controlId="admin-business_area">
+                  <FormLabel className="text-secondary">
+                    Business Area{" "}
+                    {!isEdit && businessAreaOption.length > 10 && (
+                      <small>(Maximum 10 regions allowed)</small>
+                    )}
+                  </FormLabel>
+                  <Controller
+                    control={control}
+                    name="business_area"
+                    rules={{
+                      required: "Business Area is required",
+                    }}
+                    render={(controllerProps) => {
+                      let businessList = [...businessAreaOption];
+                      if (
+                        !isEdit &&
+                        (!controllerProps.value ||
+                          controllerProps.value.length !==
+                            businessAreaOption.length)
+                      ) {
+                        businessList = [
+                          { label: "All", value: "all" },
+                          ...businessAreaOption,
+                        ];
+                      }
+                      return (
+                        <Select
+                          classNamePrefix="form-select"
+                          placeholder="Select Business Area"
+                          options={businessList}
+                          isClearable
+                          isMulti={!isEdit}
+                          defaultValue={null}
+                          value={controllerProps.value}
+                          menuPlacement="auto"
+                          onChange={(value, { option }) => {
+                            if (option && option.value === "all") {
+                              control.setValue(
+                                "business_area",
+                                businessAreaOption
+                              );
+                            } else {
+                              control.setValue("business_area", value);
+                            }
+                          }}
+                          isOptionDisabled={() => {
+                            return !isEdit && watch("business_area")
+                              ? watch("business_area").length >= 10
+                              : false;
+                          }}
+                          onMenuClose={() => {
+                            if (
+                              !isEdit &&
+                              Array.isArray(watch("business_area")) &&
+                              watch("business_area").length === 0
+                            ) {
+                              control.setValue("business_area", null);
+                            }
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                  {!isEdit &&
+                    businessAreaOption.length > 10 &&
+                    watch("business_area") && (
+                      <p className="form-error text-muted">
+                        {watch("business_area").length >= 5
+                          ? `${
+                              10 - watch("business_area").length
+                            } selections left`
+                          : ""}
+                      </p>
+                    )}
+                  {errors.business_area && (
+                    <p className="form-error">{errors.business_area.message}</p>
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6} md={12}>
+                <FormGroup controlId="admin-themes">
+                  <FormLabel className="text-secondary">
+                    Themes{" "}
+                    {!isEdit && themeOption.length > 10 && (
+                      <small>(Maximum 10 regions allowed)</small>
+                    )}
+                  </FormLabel>
+                  <Controller
+                    control={control}
+                    name="themes"
+                    rules={{
+                      required: "Theme is required",
+                    }}
+                    render={(controllerProps) => {
+                      let themeList = [...themeOption];
+                      if (
+                        !isEdit &&
+                        (!controllerProps.value ||
+                          controllerProps.value.length !== themeOption.length)
+                      ) {
+                        themeList = [
+                          { label: "All", value: "all" },
+                          ...themeOption,
+                        ];
+                      }
+                      return (
+                        <Select
+                          classNamePrefix="form-select"
+                          placeholder="Select Themes"
+                          options={themeList}
+                          isClearable
+                          isMulti={!isEdit}
+                          defaultValue={null}
+                          value={controllerProps.value}
+                          menuPlacement="auto"
+                          onChange={(value, { option }) => {
+                            if (option && option.value === "all") {
+                              control.setValue("themes", themeOption);
+                            } else {
+                              control.setValue("themes", value);
+                            }
+                          }}
+                          isOptionDisabled={() => {
+                            return !isEdit && watch("themes")
+                              ? watch("themes").length >= 10
+                              : false;
+                          }}
+                          onMenuClose={() => {
+                            if (
+                              !isEdit &&
+                              Array.isArray(watch("themes")) &&
+                              watch("themes").length === 0
+                            ) {
+                              control.setValue("themes", null);
+                            }
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                  {!isEdit &&
+                    themeOption.length > 10 &&
+                    watch("themes") && (
+                      <p className="form-error text-muted">
+                        {watch("themes").length >= 5
+                          ? `${
+                              10 - watch("themes").length
+                            } selections left`
+                          : ""}
+                      </p>
+                    )}
+                  {errors.themes && (
+                    <p className="form-error">{errors.themes.message}</p>
                   )}
                 </FormGroup>
               </Col>
