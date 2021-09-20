@@ -38,35 +38,6 @@ const AdminList = () => {
   const [competitorOption, setCompetitorOptions] = useState([]);
   const [pillarOption, setPillarOptions] = useState([]);
   const [businessAreaOption, setBusinessAreaOptions] = useState([]);
-
-  useEffect(() => {
-    getVerticalList().then((res) => {
-      let list = res.map((v) => ({ value: v, label: v }));
-      setVerticalOptions(list);
-    });
-    getAreaList().then((res) => {
-      let list = res.map((a) => ({ value: a, label: a }));
-      setAreaOptions(list);
-    });
-    getRegionList().then((res) => {
-      let list = res.map((r) => ({ value: r, label: r }));
-      setRegionOptions(list);
-      setCountryOption(list);
-    });
-    getCompetitorList().then((res) => {
-      let list = res.map((v) => ({ value: v, label: v }));
-      setCompetitorOptions(list);
-    });
-    getPillarList().then((res) => {
-      let list = res.map((v) => ({ value: v, label: v }));
-      setPillarOptions(list);
-    });
-    getBusinessAreaList().then((res) => {
-      let list = res.map((v) => ({ value: v, label: v }));
-      setBusinessAreaOptions(list);
-    });
-  }, []);
-
   const [defaultData, setDefaultData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -95,6 +66,34 @@ const AdminList = () => {
     uniqueZenoti: false,
     smallBiz: false,
   });
+
+  useEffect(() => {
+    getVerticalList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setVerticalOptions(list);
+    });
+    getAreaList().then((res) => {
+      let list = res.map((a) => ({ value: a, label: a }));
+      setAreaOptions(list);
+    });
+    getRegionList().then((res) => {
+      let list = res.map((r) => ({ value: r, label: r }));
+      setRegionOptions(list);
+      setCountryOption(list);
+    });
+    getCompetitorList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setCompetitorOptions(list);
+    });
+    getPillarList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setPillarOptions(list);
+    });
+    getBusinessAreaList().then((res) => {
+      let list = res.map((v) => ({ value: v, label: v }));
+      setBusinessAreaOptions(list);
+    });
+  }, []);
 
   const ActionRenderer = (props) => {
     return (
@@ -347,23 +346,23 @@ const AdminList = () => {
     }, 1000);
   }, [searchValue]);
 
-  useEffect(() => {
-    if (grid) {
-      grid.api.setFilterModel({
-        ...grid.api.getFilterModel(),
-        vertical: {
-          filter: filter.vertical,
-          filterType: "text",
-          type: "contains",
-        },
+  // useEffect(() => {
+  //   if (grid) {
+  //     grid.api.setFilterModel({
+  //       ...grid.api.getFilterModel(),
+        // vertical: {
+        //   filter: filter.vertical,
+        //   filterType: "text",
+        //   type: "contains",
+        // },
         // country: {
         //   filter: filter.country,
         //   filterType: "text",
         //   type: "equals",
         // },
-      });
-    }
-  }, [filter.vertical, filter.country]);
+  //     });
+  //   }
+  // }, [filter.vertical, filter.country]);
 
   const BusinessImpactFilter = ({ business_benefits, smallBiz }, DataList) => {
     let searchData = [];
@@ -501,34 +500,35 @@ const AdminList = () => {
   };
 
   useEffect(() => {
-    let areaList = new Set();
+    // let areaList = new Set();
     let DataList = new Set();
 
     defaultData.forEach((d) => {
-      if (!filter.country && !filter.vertical && !filter.competitor) {
-        areaList.add(d.area);
-      } else if (!filter.vertical && filter.country) {
-        if (d.country.toLowerCase() === filter.country.toLowerCase()) {
-          areaList.add(d.area);
-        }
-      } else if (!filter.country && filter.vertical) {
-        if (
-          d.vertical.some(
-            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
-          )
-        ) {
-          areaList.add(d.area);
-        }
-      } else {
-        if (
-          d.country.toLowerCase() === filter.country.toLowerCase() &&
-          d.vertical.some(
-            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
-          )
-        ) {
-          areaList.add(d.area);
-        }
-      }
+      
+      // if (!filter.country && !filter.vertical && !filter.competitor) {
+      //   areaList.add(d.area);
+      // } else if (!filter.vertical && filter.country) {
+      //   if (d.country.toLowerCase() === filter.country.toLowerCase()) {
+      //     areaList.add(d.area);
+      //   }
+      // } else if (!filter.country && filter.vertical) {
+      //   if (
+      //     d.vertical.some(
+      //       (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+      //     )
+      //   ) {
+      //     areaList.add(d.area);
+      //   }
+      // } else {
+      //   if (
+      //     d.country.toLowerCase() === filter.country.toLowerCase() &&
+      //     d.vertical.some(
+      //       (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+      //     )
+      //   ) {
+      //     areaList.add(d.area);
+      //   }
+      // }
 
       if (filter.business_area.length && !filter.vertical) {
         const checkdata = filter.business_area.map((area) => {
@@ -539,7 +539,7 @@ const AdminList = () => {
         }
       } else if (
         !filter.business_area.length &&
-        filter.multipleVertical.length > 1
+        filter.multipleVertical.length
       ) {
         const checkdata = filter.multipleVertical.map((value, index) => {
           return d.vertical.includes(value);
@@ -549,7 +549,7 @@ const AdminList = () => {
         }
       } else if (
         filter.business_area.length &&
-        filter.multipleVertical.length > 1
+        filter.multipleVertical.length
       ) {
         const checkdata_vertical = filter.multipleVertical.map((value) => {
           return d.vertical.includes(value);
@@ -587,7 +587,7 @@ const AdminList = () => {
 
     setTableData(Array.from(DataList));
 
-    setAreaFilterOption(Array.from(areaList));
+    // setAreaFilterOption(Array.from(areaList));
     if (grid) {
       grid.api.destroyFilter("area");
     }
@@ -663,6 +663,7 @@ const AdminList = () => {
       data.competitors = data.competitors[0];
       apiCall = addTemplate(data);
     }
+    
     apiCall
       .then(() => {
         toastSuccess(`Feature ${isEdit ? "updated" : "added"} successfully.`);
@@ -740,7 +741,7 @@ const AdminList = () => {
             <Button
               variant="primary"
               type="button"
-              className="ml-2 mb-2"
+              className="ml-2 mb-2 button_small"
               onClick={() => toggleUploadModal(!showUploadModal)}
             >
               Bulk Upload
@@ -748,7 +749,7 @@ const AdminList = () => {
             <Button
               variant="primary"
               type="button"
-              className="ml-2 mb-2"
+              className="ml-2 mb-2 button_small"
               onClick={() => toggleAdminModal(null)}
             >
               Add Feature

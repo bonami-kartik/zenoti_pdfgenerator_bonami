@@ -212,6 +212,9 @@ background-color: white;
     float: right;
     cursor: pointer;
   }
+  .button_small {
+    font-size: 11px;
+  }
 }
 
 @media (min-width: 1024px) and (max-width: 1400px) {

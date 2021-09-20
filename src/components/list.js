@@ -97,7 +97,8 @@ const List = () => {
   const getTableData = useCallback(() => {
     setFecthing(true);
     getAdminList().then((res) => {
-      let areaList = [];
+      // let areaList = [];
+      // let countryList = [];
       res.forEach((d, index) => {
         // if (d.country && !countryList.includes(d.country)) {
         //   countryList.push(d.country);
@@ -182,10 +183,10 @@ const List = () => {
     if (fetching) grid.api.showLoadingOverlay();
   };
 
-  useEffect(() => {
-    if (grid) {
-      grid.api.setFilterModel({
-        ...grid.api.getFilterModel(),
+  // useEffect(() => {
+  //   if (grid) {
+  //     grid.api.setFilterModel({
+  //       ...grid.api.getFilterModel(),
         // vertical: {
         //   filter: filter.vertical,
         //   filterType: "text",
@@ -196,10 +197,10 @@ const List = () => {
         //   filterType: "text",
         //   type: "equals",
         // },
-      });
-      grid.api.deselectAll();
-    }
-  }, [filter.vertical, filter.country]);
+  //     });
+  //     grid.api.deselectAll();
+  //   }
+  // }, [filter.vertical, filter.country]);
 
   const BusinessImpactFilter = ({ business_benefits, smallBiz }, DataList) => {
     let searchData = [];
@@ -393,7 +394,6 @@ const List = () => {
         const checkdata_area = filter.business_area.map((area) => {
           return d.business_area.includes(area);
         });
-
         if (
           !checkdata_vertical.includes(false) &&
           !checkdata_area.includes(false)
@@ -760,15 +760,15 @@ const List = () => {
       </Row>
       <Row>
         <Col sm={12} lg={3} md={12}>
-            <FilterComponent
-              filter={filter}
-              handleFilterChange={handleFilterValue}
-              countryOption={countryOption}
-              verticalOption={verticalOption}
-              competitorOption={competitorOption}
-              pillarOption={pillarOption}
-              businessAreaOption={businessAreaOption}
-            />
+          <FilterComponent
+            filter={filter}
+            handleFilterChange={handleFilterValue}
+            countryOption={countryOption}
+            verticalOption={verticalOption}
+            competitorOption={competitorOption}
+            pillarOption={pillarOption}
+            businessAreaOption={businessAreaOption}
+          />
         </Col>
         <Col sm={12} lg={9} md={12}>
           <SearchContext.Provider value={{ searchString: searchValue }}>
