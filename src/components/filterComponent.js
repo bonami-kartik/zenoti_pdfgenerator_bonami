@@ -324,12 +324,12 @@ const FilterComponent = ({
               </Col>
             </Row>
 
-            <Row>
+             <Row>
               <Col md={12}>
                 <h6>
                   <b>Select Region</b>
                 </h6>
-                {countryOption.map((country, index) => {
+                {countryOption.map(({value,label}, index) => {
                   return (
                     <span
                       className="buttonClass btn btn-sm countryOption"
@@ -339,20 +339,20 @@ const FilterComponent = ({
                       onClick={() =>
                         onChange(
                           `countryOption_${index}`,
-                          country,
+                          value,
                           setRegionFilter
                         )
                       }
                     >
-                      {country}
+                      {value}
                     </span>
                   );
                 })}
                 <hr />
               </Col>
-            </Row>
+            </Row> 
 
-            <Row>
+             <Row>
               <Col md={12}>
                 <h6>
                   <b>Compare With</b>

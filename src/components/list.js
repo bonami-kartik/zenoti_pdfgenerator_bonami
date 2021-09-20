@@ -186,11 +186,11 @@ const List = () => {
     if (grid) {
       grid.api.setFilterModel({
         ...grid.api.getFilterModel(),
-        vertical: {
-          filter: filter.vertical,
-          filterType: "text",
-          type: "contains",
-        },
+        // vertical: {
+        //   filter: filter.vertical,
+        //   filterType: "text",
+        //   type: "contains",
+        // },
         // country: {
         //   filter: filter.country,
         //   filterType: "text",
@@ -341,30 +341,30 @@ const List = () => {
     let DataList = new Set();
 
     defaultData.forEach((d) => {
-      if (!filter.country && !filter.vertical && !filter.competitor) {
-        areaList.add(d.area);
-      } else if (!filter.vertical && filter.country) {
-        if (d.country.toLowerCase() === filter.country.toLowerCase()) {
-          areaList.add(d.area);
-        }
-      } else if (!filter.country && filter.vertical) {
-        if (
-          d.vertical.some(
-            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
-          )
-        ) {
-          areaList.add(d.area);
-        }
-      } else {
-        if (
-          d.country.toLowerCase() === filter.country.toLowerCase() &&
-          d.vertical.some(
-            (e) => e.toLowerCase() === filter.vertical.toLowerCase()
-          )
-        ) {
-          areaList.add(d.area);
-        }
-      }
+      // if (!filter.country && !filter.vertical && !filter.competitor) {
+      //   areaList.add(d.area);
+      // } else if (!filter.vertical && filter.country) {
+      //   if (d.country.toLowerCase() === filter.country.toLowerCase()) {
+      //     areaList.add(d.area);
+      //   }
+      // } else if (!filter.country && filter.vertical) {
+      //   if (
+      //     d.vertical.some(
+      //       (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+      //     )
+      //   ) {
+      //     areaList.add(d.area);
+      //   }
+      // } else {
+      //   if (
+      //     d.country.toLowerCase() === filter.country.toLowerCase() &&
+      //     d.vertical.some(
+      //       (e) => e.toLowerCase() === filter.vertical.toLowerCase()
+      //     )
+      //   ) {
+      //     areaList.add(d.area);
+      //   }
+      // }
 
       if (filter.business_area.length && !filter.vertical) {
         const checkdata = filter.business_area.map((area) => {
@@ -375,7 +375,7 @@ const List = () => {
         }
       } else if (
         !filter.business_area.length &&
-        filter.multipleVertical.length > 1
+        filter.multipleVertical.length
       ) {
         const checkdata = filter.multipleVertical.map((value, index) => {
           return d.vertical.includes(value);
@@ -385,7 +385,7 @@ const List = () => {
         }
       } else if (
         filter.business_area.length &&
-        filter.multipleVertical.length > 1
+        filter.multipleVertical.length
       ) {
         const checkdata_vertical = filter.multipleVertical.map((value) => {
           return d.vertical.includes(value);
@@ -423,7 +423,7 @@ const List = () => {
 
     setTableData(Array.from(DataList));
 
-    setAreaFilterOption(Array.from(areaList));
+    // setAreaFilterOption(Array.from(areaList));
     if (grid) {
       grid.api.destroyFilter("area");
     }
@@ -760,15 +760,15 @@ const List = () => {
       </Row>
       <Row>
         <Col sm={12} lg={3} md={12}>
-          <FilterComponent
-            filter={filter}
-            handleFilterChange={handleFilterValue}
-            countryOption={countryOption}
-            verticalOption={verticalOption}
-            competitorOption={competitorOption}
-            pillarOption={pillarOption}
-            businessAreaOption={businessAreaOption}
-          />
+            <FilterComponent
+              filter={filter}
+              handleFilterChange={handleFilterValue}
+              countryOption={countryOption}
+              verticalOption={verticalOption}
+              competitorOption={competitorOption}
+              pillarOption={pillarOption}
+              businessAreaOption={businessAreaOption}
+            />
         </Col>
         <Col sm={12} lg={9} md={12}>
           <SearchContext.Provider value={{ searchString: searchValue }}>

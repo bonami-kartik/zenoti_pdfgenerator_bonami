@@ -51,6 +51,7 @@ const AdminList = () => {
     getRegionList().then((res) => {
       let list = res.map((r) => ({ value: r, label: r }));
       setRegionOptions(list);
+      setCountryOption(list);
     });
     getCompetitorList().then((res) => {
       let list = res.map((v) => ({ value: v, label: v }));
@@ -265,16 +266,16 @@ const AdminList = () => {
   const getTableData = useCallback(() => {
     setFecthing(true);
     getAdminList().then((res) => {
-      let countryList = [];
-      let areaList = [];
+      // let countryList = [];
+      // let areaList = [];
       res.forEach((d, index) => {
-        if (d.country && !countryList.includes(d.country)) {
-          countryList.push(d.country);
-        }
-        if (d.area && !areaList.includes(d.area)) {
-          areaList.push(d.area);
-        }
-        setAreaFilterOption(areaList);
+        // if (d.country && !countryList.includes(d.country)) {
+        //   countryList.push(d.country);
+        // }
+        // if (d.area && !areaList.includes(d.area)) {
+        //   areaList.push(d.area);
+        // }
+        // setAreaFilterOption(areaList);
 
         //testing data inserting in template list api
         if (index < 100) {
@@ -303,7 +304,7 @@ const AdminList = () => {
           d.competitor = ["booker", "mbo"];
         }
       });
-      setCountryOption(countryList);
+      // setCountryOption(countryList);
       setDefaultData(res);
       setFecthing(false);
     });
